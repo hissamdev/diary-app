@@ -4,6 +4,7 @@ import MainTime from "./MainTime";
 import EntryTags from "./EntryTags";
 import EditButton from "./EditButton";
 
+
 export default function EntryHeader() {
     return(
         <>

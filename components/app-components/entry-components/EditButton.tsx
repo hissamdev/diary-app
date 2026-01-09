@@ -1,9 +1,14 @@
 import { SquarePen } from "lucide-react-native";
 import { Pressable, Text, StyleSheet } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 export default function EditButton() {
+
+    const  navigation = useNavigation();
+
     return(
-        <Pressable style={styles.container}>
+        <Pressable onPress={() => navigation.navigate('Edit')} style={styles.container}>
             <SquarePen color={'#4338CA'} size={12} />
             <Text style={styles.text}>Edit</Text>
         </Pressable>

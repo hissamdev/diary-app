@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
-import MainDate from "./MainDate";
-import Checkmark from "./properties/checklists/Checkmark";
-import Dropdown from "./properties/dropdowns/Dropdown";
+import MainDate from "../MainDate";
+import Checkmark from "./checklists/Checkmark";
+import Dropdown from "./dropdowns/Dropdown";
+import MultiselectTemplate from "./multi-select/MultiselectTemplate";
 
 export default function EntryProperties() {
     return(
@@ -14,6 +15,7 @@ export default function EntryProperties() {
                 <View style={{ display: 'flex', gap: 14 }}>
                     <Checkmark />
                     <Dropdown />
+                    <MultiselectTemplate />
                 </View>
             </View>
         </View>

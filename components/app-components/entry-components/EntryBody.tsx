@@ -2,7 +2,7 @@
 import { View, StyleSheet } from "react-native";
 import EntryHeader from "./EntryHeader";
 import EntryContent from "./EntryContent";
-import EntryProperties from "./EntryProperties";
+import EntryProperties from "./properties/EntryProperties";
 
 export default function EntryBody() {
     return(

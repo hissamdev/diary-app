@@ -1,36 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
-import Header from './components/app-components/Header';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import AppToolbar from './components/app-components/AppToolbar';
-import DailyCreate from './components/app-components/DailyCreate';
-import EntryBody from './components/app-components/entry-components/EntryBody';
+
+//Components
+import Diary from './screens/Diary';
+import EditPage from './EditPage';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 export default function App() {
   return (
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }}>
-          <ScrollView showsVerticalScrollIndicator={false} >
-            <Header />
-            <AppToolbar />
-            <DailyCreate />
-            <EntryBody />
-            <View style={styles.container}>
-              <Text>Open up App.tsx to start working on your app!</Text>
-              <StatusBar style="auto" />
-            </View>
-          </ScrollView>
-        </SafeAreaView>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }} >
+            <Stack.Screen name="Diary" component={Diary} />
+            <Stack.Screen name="Edit" component={EditPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator();
