@@ -9,34 +9,34 @@ export default function AppToolbar() {
 
     return (
         <>
-            <View style={{paddingTop: 29, paddingRight: 21, paddingLeft: 21,  display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View>
+            <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{width: '100%', height: 56, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={styles.buttonContainer}>
                         <Pressable style={[styles.largeBox, {backgroundColor: '#A855F71a'}]}>
                             <FontAwesome6 name="images" size={20} color="#A855F7" />
+                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Photos</Text>
                         </Pressable>
-                        <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Photos</Text>
                     </View>
 
-                    <View>
+                    <View style={styles.buttonContainer}>
                         <Pressable style={[styles.largeBox, {backgroundColor: '#F59E0B1a',}]}>
                             <FontAwesome6 name="wand-magic-sparkles" size={19} color="#F59E0B" />
+                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Template</Text>
                         </Pressable>
-                        <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Template</Text>
                     </View>
 
-                    <View>
+                    <View style={styles.buttonContainer}>
                         <Pressable style={[styles.largeBox, {backgroundColor: '#6366F11a',}]}>
                             <FontAwesome6 name="pen-to-square" size={20} color="#6366F1" />
+                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Write</Text>
                         </Pressable>
-                        <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Write</Text>
                     </View>
 
-                    <View>
+                    <View style={styles.buttonContainer}>
                         <Pressable onPress={() => setShowModal(true)} style={[styles.largeBox, {backgroundColor: '#10B9811a',}]}>
                             <FontAwesome6 name="tags" size={20} color="#10B981" />
+                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Tags</Text>
                         </Pressable>
-                        <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Tags</Text>
 
                         <TagsModal visible={showModal} onClose={() => setShowModal(false)}/>
                     </View>
@@ -55,15 +55,17 @@ const boxWidth = (width - totalGap - 21*2) / NUM_BOXES;
 
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        flex: 1,
+    },
+
     largeBox: {
-        width: boxWidth,
-        aspectRatio: 1,
-        marginBottom: 8,
+        height: '100%',
         display: 'flex',
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-        borderRadius: 14
     }
 })

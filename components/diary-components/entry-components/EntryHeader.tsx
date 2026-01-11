@@ -3,6 +3,7 @@ import MainDate from "./MainDate";
 import MainTime from "./MainTime";
 import EntryTags from "./EntryTags";
 import EditButton from "./EditButton";
+import EntryIcon from "./EntryIcon"
 
 
 export default function EntryHeader() {
@@ -10,7 +11,7 @@ export default function EntryHeader() {
         <>
             <View style={styles.topContainer}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                    <View style={{ width: 24, height: 24, backgroundColor: '#8D8D8D', borderRadius: 999, }}></View>
+                    <EntryIcon />
                     <MainDate date="Yesterday, 08 Jan" />
                 </View>
 
