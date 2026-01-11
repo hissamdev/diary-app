@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 //Components
 import Diary from './screens/Diary';
-import EditPage from './EditPage';
+import EditPage from './screens/EditPage';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

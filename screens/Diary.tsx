@@ -2,14 +2,14 @@ import { ScrollView } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 //Components
-import Header from '../components/app-components/Header';
-import AppToolbar from '../components/app-components/AppToolbar';
-import DailyCreate from '../components/app-components/DailyCreate';
-import EntryBody from '../components/app-components/entry-components/EntryBody';
+import Header from '../components/diary-components/Header';
+import AppToolbar from '../components/diary-components/AppToolbar';
+import DailyCreate from '../components/diary-components/DailyCreate';
+import EntryBody from '../components/diary-components/entry-components/EntryBody';
 
 export default function Diary() {
   return (
-          <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView showsVerticalScrollIndicator={false} >
 
                 <Header />
@@ -18,6 +18,6 @@ export default function Diary() {
                 <EntryBody />
 
             </ScrollView>
-          </SafeAreaView>
+        </SafeAreaView>
   );
 }
