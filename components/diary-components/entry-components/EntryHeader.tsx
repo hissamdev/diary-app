@@ -10,20 +10,17 @@ export default function EntryHeader() {
     return(
         <>
             <View style={styles.topContainer}>
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                    <EntryIcon />
-                    <MainDate date="Yesterday, 08 Jan" />
+                <View style={[styles.topContainer, {gap: 20}]}>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <EntryIcon />
+                        <MainDate date="Yesterday, 08 Jan" />
+                    </View>
+                    <View>
+                        <MainTime time="10:49 PM" />
+                    </View>
                 </View>
 
-                <View>
-                    <MainTime time="10:49 PM" />
-                </View>
-            </View>
-            <View>
-                <View style={[{paddingTop: 10}, styles.bottomContainer]} >
-                    <EntryTags />
-                    <EditButton />
-                </View>
+                <EditButton />
             </View>
         </>
     )
@@ -35,10 +32,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    bottomContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
     }
 })

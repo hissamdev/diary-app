@@ -2,9 +2,13 @@ import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import TagsModal from "./menus/TagsModal";
+import PropertySettings from "./menus/PropertySettings";
 
 export default function AppToolbar() {
-    const [ showModal, setShowModal ] = useState(false);
+
+    type ModalType = "property-settings" | "tag-settings" | null;
+
+    const [ showModal, setShowModal ] = useState<ModalType>(null);
 
 
     return (
@@ -12,33 +16,35 @@ export default function AppToolbar() {
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{width: '100%', height: 56, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={styles.buttonContainer}>
-                        <Pressable style={[styles.largeBox, {backgroundColor: '#A855F71a'}]}>
-                            <FontAwesome6 name="images" size={20} color="#A855F7" />
-                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Photos</Text>
+                        <Pressable style={styles.largeBox}>
+                            <FontAwesome6 name="layer-group" size={12} color="#334155" />
+                            <Text style={styles.textStyle} >Mode</Text>
                         </Pressable>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={[styles.largeBox, {backgroundColor: '#F59E0B1a',}]}>
-                            <FontAwesome6 name="wand-magic-sparkles" size={19} color="#F59E0B" />
-                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Template</Text>
+                        <Pressable onPress={() => setShowModal("property-settings")} style={[styles.largeBox]}>
+                            <FontAwesome6 name="sliders" size={12} color="#334155" />
+                            <Text style={styles.textStyle}>Properties</Text>
+
+                            <PropertySettings visible={showModal === "property-settings"} onClose={() => setShowModal(null)}/>
                         </Pressable>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={[styles.largeBox, {backgroundColor: '#6366F11a',}]}>
-                            <FontAwesome6 name="pen-to-square" size={20} color="#6366F1" />
-                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Write</Text>
+                        <Pressable style={[styles.largeBox]}>
+                            <FontAwesome6 name="tags" size={12} color="#334155" />
+                            <Text style={styles.textStyle}>Tags</Text>
                         </Pressable>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable onPress={() => setShowModal(true)} style={[styles.largeBox, {backgroundColor: '#10B9811a',}]}>
-                            <FontAwesome6 name="tags" size={20} color="#10B981" />
-                            <Text style={{textAlign: 'center', color: '#64748B', fontWeight: 600}} >Tags</Text>
+                        <Pressable onPress={() => setShowModal("tag-settings")} style={[styles.largeBox]}>
+                            <FontAwesome6 name="plus" size={12} color="#334155" />
+                            <Text style={styles.textStyle}>Note</Text>
                         </Pressable>
 
-                        <TagsModal visible={showModal} onClose={() => setShowModal(false)}/>
+                        <TagsModal visible={showModal === "tag-settings"} onClose={() => setShowModal(null)}/>
                     </View>
                 </View>
             </View>
@@ -56,7 +62,7 @@ const boxWidth = (width - totalGap - 21*2) / NUM_BOXES;
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        flex: 1,
+    flex: 1,
     },
 
     largeBox: {
@@ -65,7 +71,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        gap: 5.25,
         borderWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+
+    textStyle: {
+        textTransform: 'uppercase',
+        fontSize: 10,
+        letterSpacing: 1,
+        textAlign: 'center',
+        color: '#64748B',
+        fontWeight: 600
     }
 })
