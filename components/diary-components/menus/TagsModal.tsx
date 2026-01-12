@@ -18,13 +18,13 @@ export default function TagsModal({ visible, onClose }: Props) {
         style={{ margin: 0, width: '100%', justifyContent: 'flex-end', alignItems: 'center'}}
         >
             
-                <View style={styles.modalContainer}>
-                    <ScrollView showsVerticalScrollIndicator={true}>
-                        <View style={{justifyContent: 'flex-end', height: 2000}}>
-                            <Text>Hey</Text>
-                        </View>
-                    </ScrollView>
-                </View>
+            <View style={styles.modalContainer}>
+                <ScrollView showsVerticalScrollIndicator={true}>
+                    <View style={{justifyContent: 'flex-end', height: 2000}}>
+                        <Text>Hey</Text>
+                    </View>
+                </ScrollView>
+            </View>
         </Modal>
     )
 }

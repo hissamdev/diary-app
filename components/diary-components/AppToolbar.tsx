@@ -2,12 +2,11 @@ import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import TagsModal from "./menus/TagsModal";
-import PropertySettings from "./menus/PropertySettings";
+import PropertySettings from "./menus/property-modals/PropertySettings";
 
 export default function AppToolbar() {
 
     type ModalType = "property-settings" | "tag-settings" | null;
-
     const [ showModal, setShowModal ] = useState<ModalType>(null);
 
 
