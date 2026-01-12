@@ -1,24 +1,35 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal";
+import CreateProperty from "./CreateProperty";
+import { useState } from "react";
 
 type Props = {
     visible: boolean,
     onClose: () => void,
 }
+type ModalType = 'create' | 'edit' | null;
+
 // visible is a prop passed in, carries a boolean that is used for the built-in isVisible prop
 // onClose is a callback function prop
 
 export default function PropertySettings({ visible, onClose }: Props) {
+    const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
+
     return (
         <>
-            <Modal isVisible={visible} onBackdropPress={onClose} style={styles.container}>
+            <Modal
+                isVisible={visible} onBackdropPress={onClose}
+                style={styles.container}>
                 <View style={styles.modalContent}>
                     <View style={styles.modalHeader}>
                         <View>
                             <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 7}}>
                                 <Text style={styles.modalHeading}>Property Settings</Text>
-                                <Pressable style={{width: 17.5, height: 17.5, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5.25, backgroundColor: '#4F46E5'}}><FontAwesome6 name={'plus'} size={9} color={'white'} /></Pressable>
+                                <View style={{position: 'relative'}}>
+                                    <Pressable onPress={() => setShowPropertySettings("create")} style={{width: 17.5, height: 17.5, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5.25, backgroundColor: '#4F46E5'}}><FontAwesome6 name={'plus'} size={9} color={'white'} /></Pressable>
+                                    <CreateProperty visible={showPropertySettings === "create"} onClose={() => setShowPropertySettings(null)} />
+                                </View>
                             </View>
                             <Text style={styles.modalSubheading}>Create, delete and update your properties from here</Text>
                         </View>
