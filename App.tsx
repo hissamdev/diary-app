@@ -1,22 +1,57 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Platform, Text } from 'react-native';
 
 //Components
 import Diary from './screens/Diary';
 import EditPage from './screens/EditPage';
 
+// Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+// db
+import { SQLiteProvider } from 'expo-sqlite';
+import { db, DATABASE_NAME } from './db';
+import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import migrations from './drizzle/migrations';
+
+
+
+
 export default function App() {
+  const isWeb = Platform.OS === 'web';
+  const migraitonHook = !isWeb ?  useMigrations(db, migrations) : { success: true, error: null };
+
+  const { success, error } = migraitonHook;
+
+  if (error) {
+    return (
+      <SafeAreaProvider>
+        <Text>Migration Error: {error.message}</Text>
+      </SafeAreaProvider>
+    )
+  }
+
+  if (!success) {
+    return (
+      <SafeAreaProvider>
+        <ActivityIndicator size={'large'} />
+      </SafeAreaProvider>
+    );
+  }
+
+  const appContent = (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }} >
+          <Stack.Screen name="Diary" component={Diary} />
+          <Stack.Screen name="Edit" component={EditPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+  )
+
   return (
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} >
-            <Stack.Screen name="Diary" component={Diary} />
-            <Stack.Screen name="Edit" component={EditPage} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        {isWeb ? appContent : <SQLiteProvider databaseName={DATABASE_NAME} options={{enableChangeListener: true}}>{appContent}</SQLiteProvider>}
       </SafeAreaProvider>
   );
 }
