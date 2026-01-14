@@ -2,7 +2,9 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Checkmark() {
+export default function CheckboxTemplate() {
+
+
     return(
         <View style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>

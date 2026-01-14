@@ -1,8 +1,10 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal";
 import CreateProperty from "./CreateProperty";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popover-view";
+import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
 
 type Props = {
     visible: boolean,
@@ -15,6 +17,7 @@ type ModalType = 'create' | 'edit' | null;
 
 export default function PropertySettings({ visible, onClose }: Props) {
     const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
+    const createPropertyRef = useRef<View>(null);
 
     return (
         <>
@@ -26,9 +29,9 @@ export default function PropertySettings({ visible, onClose }: Props) {
                         <View>
                             <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 7}}>
                                 <Text style={styles.modalHeading}>Property Settings</Text>
-                                <View style={{position: 'relative'}}>
-                                    <Pressable onPress={() => setShowPropertySettings("create")} style={{width: 17.5, height: 17.5, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5.25, backgroundColor: '#4F46E5'}}><FontAwesome6 name={'plus'} size={9} color={'white'} /></Pressable>
-                                    <CreateProperty visible={showPropertySettings === "create"} onClose={() => setShowPropertySettings(null)} />
+                                <View ref={createPropertyRef} collapsable={false}>
+                                    <Pressable onPressIn={() => setShowPropertySettings("create")} style={styles.createPropertyIcon}><FontAwesome6 name={'plus'} size={9} color={'white'} /></Pressable>
+                                    
                                 </View>
                             </View>
                             <Text style={styles.modalSubheading}>Create, delete and update your properties from here</Text>
@@ -38,9 +41,25 @@ export default function PropertySettings({ visible, onClose }: Props) {
                     </View>
 
                     <View style={styles.modalBody}>
-                        <Text>Test</Text>
+                        <BoxToggle />
                     </View>
                 </View>
+                
+                {/* @ts-ignore */}
+                <Popover
+                    isVisible={showPropertySettings === "create"}
+                    onRequestClose={() => setShowPropertySettings(null)}
+                    backgroundStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+                    popoverStyle={styles.popoverStyles}
+                    arrowSize={{width: 0, height: 0,}}
+                    offset={5}
+                    animationConfig={{
+                        duration: 200,
+
+                    }}>
+                        <CreateProperty visible={showPropertySettings === "create"} onClose={() => setShowPropertySettings(null)} />
+                        
+                </Popover>
             </Modal>
         </>
     )
@@ -67,6 +86,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
 
+    createPropertyIcon: {
+        width: 17.5, height: 17.5,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5.25,
+        backgroundColor: '#4F46E5'
+    },
+
     modalHeading: {
         fontSize: 10,
         letterSpacing: 0.5,
@@ -84,5 +112,14 @@ const styles = StyleSheet.create({
         paddingTop: 21,
         display: 'flex',
         gap: 10,
+    },
+
+    popoverStyles: {
+        borderWidth: 0,
+        backgroundColor: 'black'
     }
 })
+
+//mode={PopoverMode.JS_MODAL}
+// placement={PopoverPlacement.BOTTOM}
+// easing: Easing.out(Easing.back(1.5)),

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import MainDate from "../MainDate";
-import Checkmark from "./checklists/Checkmark";
+import Checkmark from "./checklists/CheckboxTemplate";
 import Dropdown from "./dropdowns/Dropdown";
 import MultiselectTemplate from "./multi-select/MultiselectTemplate";
 
@@ -13,7 +13,6 @@ export default function EntryProperties() {
                 <Text style={styles.categoryName}>Category Name</Text>
 
                 <View style={{ display: 'flex', gap: 14 }}>
-                    <Checkmark />
                     <Dropdown />
                     <MultiselectTemplate />
                 </View>
