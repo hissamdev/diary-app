@@ -11,18 +11,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // db
 import { SQLiteProvider } from 'expo-sqlite';
-import { db, DATABASE_NAME } from './db';
+//@ts-ignore
+import { db, expoDb, DATABASE_NAME } from './db';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from './drizzle/migrations';
-
-
+import {useDrizzleStudio} from 'expo-drizzle-studio-plugin';
 
 
 export default function App() {
   const isWeb = Platform.OS === 'web';
-  const migraitonHook = !isWeb ?  useMigrations(db, migrations) : { success: true, error: null };
-
-  const { success, error } = migraitonHook;
+  const { success, error } = useMigrations(db, migrations);
+  useDrizzleStudio(expoDb);
 
   if (error) {
     return (

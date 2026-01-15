@@ -1,1 +1,1 @@
-export * from "./db.native";
+export * from './db'
