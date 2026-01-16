@@ -1,8 +1,10 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, processColor, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import Modal from "react-native-modal";
 import Popover from 'react-native-popover-view';
+import { db } from "../../../../db";
+import { templateTable } from "../../../../db/schema";
 
 type Props = {
     visible: boolean,
@@ -18,13 +20,31 @@ type PropertyArray = {
 
 
 export default function CreateProperty({ visible, onClose }: Props) {
-    const [selectedType, setSelectedType] = useState<PropertyType>(null);
-
     const propertyTypes: PropertyArray[] = [
         { id: 'checkbox', text: 'Checkbox', icon: 'square-check' },
         { id: 'dropdown', text: 'Dropdown', icon: 'arrow-down' },
         { id: 'slider', text: 'Slider', icon: 'sliders' }
     ]
+
+    const [propertyName, setPropertyName] = useState('');
+    const [selectedType, setSelectedType] = useState<PropertyType>(null); // Consider setting default to checkbox
+    const [propertyVariant, setPropertyVariant] = useState('box-toggle');
+    const [propertyIcon, setPropertyIcon] = useState('check');
+    const [propertyColor, setPropertyColor] = useState('#10B9811a');
+    const [isPropertyChecked, setIsPropertyChecked] = useState(false);
+
+    const onSave = async () => {
+        await db.insert(templateTable).values(
+            {
+                name: propertyName,
+                type: selectedType,
+                variant: propertyVariant,
+                icon: propertyIcon,
+                color: propertyColor,
+                isChecked: isPropertyChecked,
+            }
+        )
+    }
 
     return (
         <>
@@ -37,31 +57,22 @@ export default function CreateProperty({ visible, onClose }: Props) {
                             <View style={styles.infoRow}>
                                 <View>
                                     <Text style={{ paddingBottom: 6, textAlign: 'center' }}>Icon</Text>
-
                                     <View style={styles.iconPicker}><Pressable></Pressable></View>
                                 </View>
-
                                 <View style={{ flex: 1, }}>
                                     <Text style={{ paddingBottom: 6 }}>Property Name</Text>
-
-                                    <TextInput id="property-name" textAlignVertical="center" style={styles.nameInput} />
+                                    <TextInput id="property-name" textAlignVertical="center" onChangeText={setPropertyName} style={styles.nameInput} />
                                 </View>
                             </View>
-
                             <View style={styles.propertyTypeRow}>
-
-
                                 { propertyTypes.map(type => {
                                     const active = selectedType === type.id;
-
                                     return (
                                         <Pressable key={type.id} onPress={() => setSelectedType(type.id)} style={[styles.typeStructure, styles.typeInactive, active && styles.typeActive]}>
                                             <FontAwesome6 name={type.icon} size={15} color={active ? "white" : "#94a3b8"} />
                                             <Text style={[styles.labelStructure, styles.labelInactive, active && styles.labelActive]}>{type.text}</Text>
                                         </Pressable>
-                                    )
-                                })
-                            }
+                                    )})}
                             </View>
                         </View>
                     </View>
