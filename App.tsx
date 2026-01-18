@@ -23,7 +23,7 @@ export default function App() {
   const { success, error } = useMigrations(db, migrations);
   useDrizzleStudio(expoDb);
 
-  if (error) {
+  if (!isWeb && error) {
     return (
       <SafeAreaProvider>
         <Text>Migration Error: {error.message}</Text>
@@ -31,7 +31,7 @@ export default function App() {
     )
   }
 
-  if (!success) {
+  if (!isWeb && !success) {
     return (
       <SafeAreaProvider>
         <ActivityIndicator size={'large'} />

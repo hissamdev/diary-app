@@ -2,6 +2,7 @@ import { Plus } from "lucide-react-native";
 import { Text, View, Pressable, StyleSheet } from "react-native";
 
 import MainDate from "./entry-components/MainDate";
+import { db } from "../../db";
 
 export default function DailyCreate() {
     return(

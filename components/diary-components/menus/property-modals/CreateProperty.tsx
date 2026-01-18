@@ -18,7 +18,6 @@ type PropertyArray = {
     icon: string,
 }
 
-
 export default function CreateProperty({ visible, onClose }: Props) {
     const propertyTypes: PropertyArray[] = [
         { id: 'checkbox', text: 'Checkbox', icon: 'square-check' },
@@ -31,19 +30,21 @@ export default function CreateProperty({ visible, onClose }: Props) {
     const [propertyVariant, setPropertyVariant] = useState('box-toggle');
     const [propertyIcon, setPropertyIcon] = useState('check');
     const [propertyColor, setPropertyColor] = useState('#10B9811a');
-    const [isPropertyChecked, setIsPropertyChecked] = useState(false);
+    const [propertyData, setPropertyData] = useState({ isChecked: false }); // Default data will be passed through the creation process
 
-    const onSave = async () => {
-        await db.insert(templateTable).values(
+    const handleCreate = async () => {
+        try { await db.insert(templateTable).values(
             {
                 name: propertyName,
                 type: selectedType,
                 variant: propertyVariant,
                 icon: propertyIcon,
                 color: propertyColor,
-                isChecked: isPropertyChecked,
-            }
-        )
+                data: propertyData,
+            })
+        } catch(err) {
+            console.error('Error: ', err);
+        }
     }
 
     return (
@@ -64,6 +65,8 @@ export default function CreateProperty({ visible, onClose }: Props) {
                                     <TextInput id="property-name" textAlignVertical="center" onChangeText={setPropertyName} style={styles.nameInput} />
                                 </View>
                             </View>
+
+                            {/* Select property type boxes */}
                             <View style={styles.propertyTypeRow}>
                                 { propertyTypes.map(type => {
                                     const active = selectedType === type.id;
@@ -74,6 +77,11 @@ export default function CreateProperty({ visible, onClose }: Props) {
                                         </Pressable>
                                     )})}
                             </View>
+
+                            <Pressable onPress={handleCreate} style={styles.createButton}>
+                                <FontAwesome6 name={'check'} color='white' size={14} />
+                                <Text style={styles.createText}>Create Property</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
@@ -139,6 +147,26 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         gap: 7,
+    },
+
+    createButton: {
+        marginTop: 33,
+        width: '100%',
+        height: 40,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+        borderRadius: 6,
+        backgroundColor: '#0F172A',
+    },
+
+    createText: {
+        color: 'white',
+        fontSize: 13,
+        fontWeight: 900,
+        letterSpacing: 1,
     },
 
     typeStructure: {
