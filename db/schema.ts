@@ -23,18 +23,18 @@ export const templateTable = sqliteTable("templateTable", {
 export const propertiesTable = sqliteTable("propertiesTable", {
     id: integer().primaryKey({ autoIncrement: true }),
 
-    dailyTableId: integer()
+    dailyEntryId: integer()
         .notNull()
         .references(() => dailyTable.id),
 
-    templateTableId: integer()
+    templatePropertyId: integer()
         .notNull()
         .references(() => templateTable.id, { onDelete: 'cascade' }),
     
     data: text({ mode: 'json' }).notNull(),
 }, (table) => ({ // Make sure there are no duplicates
     uniqueDailyTemplate: uniqueIndex("unique_daily_template").on(
-        table.dailyTableId, table.templateTableId
+        table.dailyEntryId, table.templatePropertyId
     )
     })
 );

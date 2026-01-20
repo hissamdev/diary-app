@@ -10,7 +10,6 @@ type Props = {
     visible: boolean,
     onClose: () => void,
 }
-
 type PropertyType = 'checkbox' | 'dropdown' | 'slider' | null;
 type PropertyArray = {
     id: PropertyType,
@@ -30,7 +29,7 @@ export default function CreateProperty({ visible, onClose }: Props) {
     const [propertyVariant, setPropertyVariant] = useState('box-toggle');
     const [propertyIcon, setPropertyIcon] = useState('check');
     const [propertyColor, setPropertyColor] = useState('#10B9811a');
-    const [propertyData, setPropertyData] = useState({ isChecked: false }); // Default data will be passed through the creation process
+    const [propertyData, setPropertyData] = useState({ value: 'Option1', option: ['Option1', 'Option2'] }); // Default data will be passed through the creation process
 
     const handleCreate = async () => {
         try { await db.insert(templateTable).values(

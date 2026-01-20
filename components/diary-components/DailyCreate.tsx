@@ -3,14 +3,46 @@ import { Text, View, Pressable, StyleSheet } from "react-native";
 
 import MainDate from "./entry-components/MainDate";
 import { db } from "../../db";
+import { dailyTable, propertiesTable, templateTable } from "../../db/schema";
+
+import { InferSelectModel } from "drizzle-orm";
+
+type Template = InferSelectModel<typeof templateTable>;
+
+
+const currentDate = new Date().toISOString().split('T')[0];
+console.log(currentDate);
+console.log('test log')
 
 export default function DailyCreate() {
+    async function handleDailyEntry() {
+        try {
+            const createEntry = await db.insert(dailyTable).values({
+                date: new Date().toISOString().split('T')[0],
+                time: new Date().toISOString().split('T')[1].split('.')[0],
+            })
+            const dailyId = createEntry.lastInsertRowId;
+            const template: Template[] = await db.select().from(templateTable);
+
+            const propertyRows = template.map((t) => ({
+                dailyEntryId: dailyId,
+                templatePropertyId: t.id,
+                data: t.data,
+            }))
+
+            await db.insert(propertiesTable).values(propertyRows);
+        } catch (err) {
+            console.error(err)
+        }
+        
+    }
+
     return(
         <>
             <View style={{paddingTop: 38, paddingRight: 21, paddingLeft: 21}}>
                 <MainDate date="Today, 09 Jan" />
 
-                <Pressable style={styles.createBox}>
+                <Pressable onPress={handleDailyEntry} style={styles.createBox}>
                     <View style={styles.plusContainer}>
                         <Plus color={'#94A3B8'} />
                     </View>

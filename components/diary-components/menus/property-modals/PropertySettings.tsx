@@ -4,6 +4,8 @@ import Modal from "react-native-modal";
 import CreateProperty from "./CreateProperty";
 import { useState, useRef } from "react";
 import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popover-view";
+
+// Components
 import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
 
 type Props = {
@@ -16,6 +18,10 @@ type ModalType = 'create' | 'edit' | null;
 // onClose is a callback function prop
 
 export default function PropertySettings({ visible, onClose }: Props) {
+    const componentList = {
+        'box-toggle': BoxToggle,
+    }
+    
     const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
     const createPropertyRef = useRef<View>(null);
 

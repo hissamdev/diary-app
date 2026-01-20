@@ -6,7 +6,7 @@ import EditBody from "../components/edit-page-components/EditBody";
 
 export default function EditPage() {
     return (
-        <SafeAreaView style={{ backgroundColor: "#1F1F1F" }}>
+        <SafeAreaView>
             <Header />
             <TopSection />
             <EditBody />
