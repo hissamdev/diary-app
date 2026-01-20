@@ -1,5 +1,18 @@
 import { FontAwesome6 } from "@expo/vector-icons";
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { db } from "../../../../db";
+import { propertiesTable } from "../../../../db/schema";
+import { eq } from "drizzle-orm";
+
+type Properties = {
+    id: number,
+    name: string,
+    icon: string,
+    color: string,
+    variant: string,
+    data: any,
+}
 
 const props = {
         id: 'prop_1',
@@ -10,15 +23,28 @@ const props = {
         checked: true,
     }
 
-export default function BoxToggle({  }) {
+export default function BoxToggle({ id, name, icon, color, variant, data  }: Properties) {
+    
+    const [checked, setChecked] = useState<boolean>(data.isChecked);
+    console.log(checked)
+
+    async function toggleCheck() {
+        setChecked(!checked);
+
+        try {
+            await db.update(propertiesTable).set({ data: { isChecked: false } });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <>
-            <Pressable style={[styles.container, props.checked && styles.containerActive]}>
-                <View style={[styles.iconContainer, props.checked ? styles.iconActive : styles.iconInactive]}>
-                    <FontAwesome6 name={props.icon} size={12} color={props.checked ? 'white' : '#475569'} />
+            <Pressable onPress={toggleCheck} style={[styles.container, checked && styles.containerActive]}>
+                <View style={[styles.iconContainer, checked ? styles.iconActive : styles.iconInactive]}>
+                    <FontAwesome6 name={icon} size={12} color={checked ? 'white' : '#475569'} />
                 </View>
-                <Text style={[styles.text, props.checked ? styles.textActive : styles.textInactive]}>{props.name}</Text>
+                <Text style={[styles.text, checked ? styles.textActive : styles.textInactive]}>{name}</Text>
             </Pressable>
         </>
     )

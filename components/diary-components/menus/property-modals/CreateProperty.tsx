@@ -32,8 +32,7 @@ export default function CreateProperty({ visible, onClose }: Props) {
     const [propertyData, setPropertyData] = useState({ value: 'Option1', option: ['Option1', 'Option2'] }); // Default data will be passed through the creation process
 
     const handleCreate = async () => {
-        try { await db.insert(templateTable).values(
-            {
+        try { await db.insert(templateTable).values({
                 name: propertyName,
                 type: selectedType,
                 variant: propertyVariant,

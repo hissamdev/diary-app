@@ -2,25 +2,54 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal";
 import CreateProperty from "./CreateProperty";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, FC } from "react";
 import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popover-view";
 
 // Components
 import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
+import { db } from "../../../../db";
+import { templateTable } from "../../../../db/schema";
 
+type ModalType = 'create' | 'edit' | null;
+type ComponentList = Record<string, FC<Properties>>
 type Props = {
     visible: boolean,
     onClose: () => void,
 }
-type ModalType = 'create' | 'edit' | null;
+type Properties = {
+    id: number,
+    name: string,
+    icon: string,
+    color: string,
+    variant: string,
+    data: any,
+}
 
 // visible is a prop passed in, carries a boolean that is used for the built-in isVisible prop
 // onClose is a callback function prop
 
 export default function PropertySettings({ visible, onClose }: Props) {
-    const componentList = {
+    const [properties, setProperties] = useState<Properties[]>([]);
+    
+    useEffect(() => {
+        async function fetchTemplate() {
+            try {
+                const result = await db.select().from(templateTable);
+
+                setProperties(result);
+            } catch (err) {
+                console.error('Error fetching template, ', err);
+            };
+        }
+
+        fetchTemplate();
+    }, [])
+
+    console.log(properties)
+
+    const componentList: ComponentList = {
         'box-toggle': BoxToggle,
-    }
+    };
     
     const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
     const createPropertyRef = useRef<View>(null);
@@ -47,7 +76,11 @@ export default function PropertySettings({ visible, onClose }: Props) {
                     </View>
 
                     <View style={styles.modalBody}>
-                        <BoxToggle />
+                        {properties.map((p) => {
+                            const Property = componentList[p.variant];
+
+                            return <Property key={p.id} name={p.name} icon={p.icon} color={p.color}  data={p.data} id={p.id} variant={p.variant} />
+                        })}
                     </View>
                 </View>
                 

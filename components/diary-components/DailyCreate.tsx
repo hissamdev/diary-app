@@ -24,6 +24,7 @@ export default function DailyCreate() {
             const dailyId = createEntry.lastInsertRowId;
             const template: Template[] = await db.select().from(templateTable);
 
+            // This is what we will populate the propertiesTable with
             const propertyRows = template.map((t) => ({
                 dailyEntryId: dailyId,
                 templatePropertyId: t.id,
@@ -32,7 +33,7 @@ export default function DailyCreate() {
 
             await db.insert(propertiesTable).values(propertyRows);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
         
     }
