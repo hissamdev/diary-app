@@ -9,13 +9,14 @@ import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popov
 import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
 import { db } from "../../../../db";
 import { templateTable } from "../../../../db/schema";
+import { DiaryTableTypes } from "../../entry-components/EntryBody";
 
 type ModalType = 'create' | 'edit' | null;
-type ComponentList = Record<string, FC<Properties>>
+type ComponentList = Record<string, FC<Properties>>;
 type Props = {
     visible: boolean,
     onClose: () => void,
-}
+};
 type Properties = {
     id: number,
     name: string,
@@ -23,7 +24,8 @@ type Properties = {
     color: string,
     variant: string,
     data: any,
-}
+    entryProps: DiaryTableTypes,
+};
 
 // visible is a prop passed in, carries a boolean that is used for the built-in isVisible prop
 // onClose is a callback function prop

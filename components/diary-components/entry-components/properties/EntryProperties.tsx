@@ -6,8 +6,7 @@ import MultiselectTemplate from "./multi-select/MultiselectTemplate";
 
 export default function EntryProperties() {
     return(
-        <View style={{ paddingTop: 21 }}>
-            <MainDate date="08, Jan 2026" />
+        <View style={{ paddingTop: 20 }}>
 
             <View style={styles.container}>
                 <Text style={styles.categoryName}>Category Name</Text>
@@ -23,11 +22,11 @@ export default function EntryProperties() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 7,
+        marginTop: 0,
         padding: 14,
         borderRadius: 3,
         borderWidth: 1,
-        borderColor: '#00000024'
+        borderColor: '#00000024',
     },
 
     categoryName: {

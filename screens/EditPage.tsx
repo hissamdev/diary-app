@@ -7,6 +7,7 @@ import EditBody from "../components/edit-page-components/EditBody";
 // Types
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../App";
+import EditProperties from "../components/diary-components/entry-components/EditProperties";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Edit'>;
 
@@ -15,9 +16,10 @@ export default function EditPage({ route }: Props) {
 
     return (
         <SafeAreaView>
-            <Header />
+            <Header entryProps={entryProps} />
             <TopSection />
-            <EditBody />
+            <EditBody entryProps={entryProps} />
+            <EditProperties entryProps={entryProps} />
         </SafeAreaView>
     )
 }

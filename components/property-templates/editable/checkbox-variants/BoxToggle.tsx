@@ -3,15 +3,17 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { db } from "../../../../db";
 import { dailyTable, propertiesTable, templateTable } from "../../../../db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { DiaryTableTypes } from "../../../diary-components/entry-components/EntryBody";
 
-type Properties = {
+type Props = {
     id: number,
     name: string,
     icon: string,
     color: string,
     variant: string,
     data: any,
+    entryProps: DiaryTableTypes,
 }
 
 const props = {
@@ -23,7 +25,7 @@ const props = {
         checked: true,
     }
 
-export default function BoxToggle({ id, name, icon, color, variant, data  }: Properties) {
+export default function BoxToggle({ id, name, icon, color, data, variant, entryProps }: Props) {
     const [checked, setChecked] = useState<boolean>(data.isChecked);
     console.log(checked)
 
@@ -32,7 +34,7 @@ export default function BoxToggle({ id, name, icon, color, variant, data  }: Pro
         setChecked(newChecked);
 
         try {
-            await db.update(propertiesTable).set({ data: { isChecked: newChecked } }).where(eq(propertiesTable.templatePropertyId, id), eq(propertiesTable.dailyEntryId, dailyTable.id));
+            await db.update(propertiesTable).set({ data: { isChecked: newChecked } }).where(and(eq(propertiesTable.templatePropertyId, id), eq(propertiesTable.dailyEntryId, entryProps.id)));
 
             console.log('id is: ', propertiesTable.id)
             console.log('')
