@@ -6,10 +6,12 @@ import EntryProperties from "./properties/EntryProperties";
 import { useEffect, useState } from "react";
 import { db } from "../../../db";
 import { dailyTable } from "../../../db/schema";
+import { asc, desc } from "drizzle-orm";
 
 export type DiaryTableTypes = {
     id: number,
     date: string,
+    time: string,
 }
 
 export default function EntryBody() {
@@ -17,7 +19,7 @@ export default function EntryBody() {
 
     useEffect(() => {
         async function fetchDiary() {
-            const result = await db.select().from(dailyTable);
+            const result = await db.select().from(dailyTable).orderBy(desc(dailyTable.id));
             setAllEntries(result);
         };
 
@@ -44,6 +46,10 @@ const styles = StyleSheet.create({
     entryBody: {
         paddingTop: 69,
         paddingRight: 21,
-        paddingLeft: 21
+        paddingLeft: 21,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 100,
+
     }
 })
