@@ -31,6 +31,7 @@ type Properties = {
 export default function PropertySettings({ visible, onClose }: Props) {
     const [properties, setProperties] = useState<Properties[]>([]);
     
+    // Store the template into state
     useEffect(() => {
         async function fetchTemplate() {
             try {
@@ -44,8 +45,6 @@ export default function PropertySettings({ visible, onClose }: Props) {
 
         fetchTemplate();
     }, [])
-
-    console.log(properties)
 
     const componentList: ComponentList = {
         'box-toggle': BoxToggle,

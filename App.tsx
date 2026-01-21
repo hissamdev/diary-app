@@ -16,6 +16,15 @@ import { db, expoDb, DATABASE_NAME } from './db';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from './drizzle/migrations';
 import {useDrizzleStudio} from 'expo-drizzle-studio-plugin';
+import { DiaryTableTypes } from './components/diary-components/entry-components/EntryBody';
+
+// 'Edit' should match the navigator name string
+export type RootStackParamList = {
+  Diary: undefined,
+  Edit: {
+    entryProps: DiaryTableTypes,
+  }
+}
 
 
 export default function App() {
@@ -55,4 +64,4 @@ export default function App() {
   );
 }
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();

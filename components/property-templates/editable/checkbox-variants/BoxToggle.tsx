@@ -2,7 +2,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { db } from "../../../../db";
-import { propertiesTable } from "../../../../db/schema";
+import { dailyTable, propertiesTable, templateTable } from "../../../../db/schema";
 import { eq } from "drizzle-orm";
 
 type Properties = {
@@ -24,15 +24,18 @@ const props = {
     }
 
 export default function BoxToggle({ id, name, icon, color, variant, data  }: Properties) {
-    
     const [checked, setChecked] = useState<boolean>(data.isChecked);
     console.log(checked)
 
     async function toggleCheck() {
-        setChecked(!checked);
+        const newChecked = !checked;
+        setChecked(newChecked);
 
         try {
-            await db.update(propertiesTable).set({ data: { isChecked: false } });
+            await db.update(propertiesTable).set({ data: { isChecked: newChecked } }).where(eq(propertiesTable.templatePropertyId, id), eq(propertiesTable.dailyEntryId, dailyTable.id));
+
+            console.log('id is: ', propertiesTable.id)
+            console.log('')
         } catch (err) {
             console.error(err);
         }

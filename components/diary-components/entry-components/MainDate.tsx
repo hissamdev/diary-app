@@ -1,12 +1,12 @@
 import { Text, StyleSheet } from "react-native";
 
-type MainDateProps = {
-    date: string;
+type Props = {
+    dateProps: string,
 }
 
-export default function MainDate({ date }: MainDateProps) {
+export default function MainDate({ dateProps }: Props) {
     return(
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{dateProps}</Text>
     )
 }
 

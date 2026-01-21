@@ -2,13 +2,23 @@ import { SquarePen } from "lucide-react-native";
 import { Pressable, Text, StyleSheet } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
+import { DiaryTableTypes } from "./EntryBody";
 
-export default function EditButton() {
+//Types
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from "../../../App";
 
-    const  navigation = useNavigation();
+type Navigation = NativeStackNavigationProp<RootStackParamList, 'Diary'>;
+type EditButtonProps = {
+    entryProps: DiaryTableTypes,
+};
+
+
+export default function EditButton({ entryProps }: EditButtonProps) {
+    const  navigation = useNavigation<Navigation>();
 
     return(
-        <Pressable onPress={() => navigation.navigate('Edit')} style={styles.container}>
+        <Pressable onPress={() => navigation.navigate('Edit', { entryProps })} style={styles.container}>
             <SquarePen color={'#4338CA'} size={12} />
             <Text style={styles.text}>Edit</Text>
         </Pressable>
@@ -26,7 +36,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 4,
         borderRadius: 4,
-        backgroundColor: '#4338CA1a'
+        backgroundColor: '#4338CA1a',
     },
     text: {
         color: '#4338CA',

@@ -4,9 +4,14 @@ import MainTime from "./MainTime";
 import EntryTags from "./EntryTags";
 import EditButton from "./EditButton";
 import EntryIcon from "./EntryIcon"
+import { DiaryTableTypes } from "./EntryBody";
+
+type EntryHeaderProps = {
+    entryProps: DiaryTableTypes,
+}
 
 
-export default function EntryHeader() {
+export default function EntryHeader({ entryProps }: EntryHeaderProps) {
     return(
         <>
             <View style={styles.topContainer}>
@@ -20,7 +25,7 @@ export default function EntryHeader() {
                     </View>
                 </View>
 
-                <EditButton />
+                <EditButton entryProps={entryProps} />
             </View>
         </>
     )
