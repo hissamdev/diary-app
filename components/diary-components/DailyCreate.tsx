@@ -6,6 +6,7 @@ import { db } from "../../db";
 import { dailyTable, propertiesTable, templateTable } from "../../db/schema";
 
 import { InferSelectModel } from "drizzle-orm";
+import { Transaction } from "../../db/db.native";
 
 type Template = InferSelectModel<typeof templateTable>;
 
@@ -19,7 +20,7 @@ export default function DailyCreate() {
         const now = new Date().toISOString()
 
         try {
-            await db.transaction(async (tx) => {
+            await db.transaction(async (tx: Transaction) => {
                 const createEntry = await tx.insert(dailyTable).values({
                     date: now.split('T')[0],
                     time: now.split('T')[1].split('.')[0],
