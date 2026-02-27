@@ -16,22 +16,27 @@ console.log('test log')
 
 export default function DailyCreate() {
     async function handleDailyEntry() {
+        const now = new Date().toISOString()
+
         try {
-            const createEntry = await db.insert(dailyTable).values({
-                date: new Date().toISOString().split('T')[0],
-                time: new Date().toISOString().split('T')[1].split('.')[0],
+            await db.transaction(async (tx) => {
+                const createEntry = await tx.insert(dailyTable).values({
+                    date: now.split('T')[0],
+                    time: now.split('T')[1].split('.')[0],
+                })
+                const dailyId = createEntry.lastInsertRowId;
+                const template: Template[] = await tx.select().from(templateTable);
+
+                // This is what we will populate the propertiesTable with
+                const propertyRows = template.map((t) => ({
+                    dailyEntryId: dailyId,
+                    templatePropertyId: t.id,
+                    data: t.data,
+                }))
+
+                await tx.insert(propertiesTable).values(propertyRows);
             })
-            const dailyId = createEntry.lastInsertRowId;
-            const template: Template[] = await db.select().from(templateTable);
-
-            // This is what we will populate the propertiesTable with
-            const propertyRows = template.map((t) => ({
-                dailyEntryId: dailyId,
-                templatePropertyId: t.id,
-                data: t.data,
-            }))
-
-            await db.insert(propertiesTable).values(propertyRows);
+            
         } catch (err) {
             console.error(err);
         }
@@ -41,7 +46,7 @@ export default function DailyCreate() {
     return(
         <>
             <View style={{paddingTop: 38, paddingRight: 21, paddingLeft: 21}}>
-                <MainDate date="Today, 09 Jan" />
+                <MainDate dateProps="Date" />
 
                 <Pressable onPress={handleDailyEntry} style={styles.createBox}>
                     <View style={styles.plusContainer}>

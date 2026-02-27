@@ -18,10 +18,10 @@ export default function EntryHeader({ entryProps }: EntryHeaderProps) {
                 <View style={[styles.topContainer, {gap: 20}]}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                         <EntryIcon />
-                        <MainDate dateProps={entryProps.date} date="Yesterday, 08 Jan" />
+                        <MainDate dateProps={entryProps.date} />
                     </View>
                     <View>
-                        <MainTime timeProps={entryProps.time} time="10:49 PM" />
+                        <MainTime timeProps={entryProps.time} />
                     </View>
                 </View>
 

@@ -17,7 +17,7 @@ export default function Header({ entryProps }: Props) {
                 <FontAwesome6 name={'angle-left'} color={'gray'} size={24} />
             </Pressable>
 
-            <MainTime timeProps={entryProps.time} time="10:49 PM" />
+            <MainTime timeProps={entryProps.time} />
         </View>
     )
 }

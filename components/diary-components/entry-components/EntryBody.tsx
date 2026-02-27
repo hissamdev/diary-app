@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { db } from "../../../db";
 import { dailyTable } from "../../../db/schema";
 import { asc, desc } from "drizzle-orm";
-import { dailyTablePc } from "../../../db/db.web";
 
 export type DiaryTableTypes = {
     id: number,
@@ -38,7 +37,7 @@ export default function EntryBody() {
                         <View key={entry.id} >
                             <EntryHeader entryProps={entry} />
                             <EntryContent entryProps={entry} />
-                            <EntryProperties entryProps={entry} />
+                            <EntryProperties />
                         </ View>
                     )
                 })}

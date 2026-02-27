@@ -1,4 +1,4 @@
-import { sqliteTable, int, integer, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 export const dailyTable = sqliteTable("dailyTable", {
     id: integer().primaryKey({ autoIncrement: true }),
