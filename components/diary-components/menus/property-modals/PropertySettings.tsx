@@ -1,15 +1,19 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { Easing, Pressable, StyleSheet, Text, View } from "react-native";
+import { Easing, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import CreateProperty from "./CreateProperty";
 import { useState, useRef, useEffect, FC } from "react";
 import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popover-view";
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist'
 
 // Components
 import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
 import { db } from "../../../../db";
 import { templateTable } from "../../../../db/schema";
 import { DiaryTableTypes } from "../../entry-components/EntryBody";
+import DropdownDisplay from "../../../property-templates/display/dropdowns/DropdownDisplay";
+import MultiselectDisplay from "../../../property-templates/display/multiselect/MultiselectDisplay";
+import { eq } from "drizzle-orm";
 
 type ModalType = 'create' | 'edit' | null;
 type ComponentList = Record<string, FC<Properties>>;
@@ -31,7 +35,9 @@ type Properties = {
 
 export default function PropertySettings({ visible, onClose }: Props) {
     const [template, setTemplate] = useState<Properties[]>([]);
-    
+    const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
+    const createPropertyRef = useRef<View>(null);
+
     // Store the template into state
     useEffect(() => {
         async function fetchTemplate() {
@@ -49,10 +55,61 @@ export default function PropertySettings({ visible, onClose }: Props) {
 
     const componentList: ComponentList = {
         'box-toggle': BoxToggle,
+        'dropdown': DropdownDisplay,
+        'multiselect': MultiselectDisplay,
     };
+
+    const handleDragEnd = async (newData) => {
+        setTemplate(newData)
+
+        try {
+            await db.transaction(async (tx) => {
+                for (let i = 0; i < newData.length; i++) {
+                    await tx
+                        .update(templateTable)
+                        .set({ order: i })
+                        .where(eq(templateTable.id, newData[i].id))
+                }
+            })
+        } catch (error) {
+            console.error("Failed to persist order: ", error)
+        }
+        await db.transaction(async (tx) => {
+            for (let i = 0; i < newData.length; i++) {
+                await tx
+                    .update(templateTable)
+                    .set({ order: i })
+                    .where(eq(templateTable.id, newData[i].id))
+            }
+        })
+    }
+
+    const renderItem = ({ item, drag, isActive }) => {
+        const Property = componentList[item.variant];
+        if (!Property) return <Text>Not Found</ Text>
+
+        return (
+            <ScaleDecorator>
+                <TouchableOpacity
+                    onLongPress={drag}
+                    disabled={isActive}
+
+
+                >
+                    <Property
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        icon={item.icon}
+                        color={item.color}
+                        variant={item.variant}
+                    />
+                </TouchableOpacity>
+            </ScaleDecorator>
+        )
+    }
     
-    const [showPropertySettings, setShowPropertySettings] = useState<ModalType>(null);
-    const createPropertyRef = useRef<View>(null);
+
 
     return (
         <>
@@ -76,18 +133,12 @@ export default function PropertySettings({ visible, onClose }: Props) {
                     </View>
 
                     <View style={styles.modalBody}>
-                        {template.map((p) => {
-                            const Property = componentList[p.variant];
-
-                            return <Property
-                                        key={p.id}
-                                        id={p.id}
-                                        name={p.name}
-                                        icon={p.icon}
-                                        color={p.color}
-                                        variant={p.variant}
-                                    />
-                        })}
+                        <DraggableFlatList
+                            data={template}
+                            onDragEnd={({data}) => handleDragEnd(data)}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={renderItem}
+                        />
                     </View>
                 </View>
                 
