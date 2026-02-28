@@ -23,15 +23,14 @@ type Properties = {
     icon: string,
     color: string,
     variant: string,
-    data: any,
-    entryProps: DiaryTableTypes,
-};
+    diaryProps: DiaryTableTypes,
+}
 
 // visible is a prop passed in, carries a boolean that is used for the built-in isVisible prop
 // onClose is a callback function prop
 
 export default function PropertySettings({ visible, onClose }: Props) {
-    const [properties, setProperties] = useState<Properties[]>([]);
+    const [template, setTemplate] = useState<Properties[]>([]);
     
     // Store the template into state
     useEffect(() => {
@@ -39,7 +38,7 @@ export default function PropertySettings({ visible, onClose }: Props) {
             try {
                 const result = await db.select().from(templateTable);
 
-                setProperties(result);
+                setTemplate(result);
             } catch (err) {
                 console.error('Error fetching template, ', err);
             };
@@ -77,10 +76,17 @@ export default function PropertySettings({ visible, onClose }: Props) {
                     </View>
 
                     <View style={styles.modalBody}>
-                        {properties.map((p) => {
+                        {template.map((p) => {
                             const Property = componentList[p.variant];
 
-                            return <Property key={p.id} name={p.name} icon={p.icon} color={p.color}  data={p.data} id={p.id} variant={p.variant} />
+                            return <Property
+                                        key={p.id}
+                                        id={p.id}
+                                        name={p.name}
+                                        icon={p.icon}
+                                        color={p.color}
+                                        variant={p.variant}
+                                    />
                         })}
                     </View>
                 </View>

@@ -5,8 +5,8 @@ import EntryContent from "./EntryContent";
 import EntryProperties from "./properties/EntryProperties";
 import { useEffect, useState } from "react";
 import { db } from "../../../db";
-import { dailyTable } from "../../../db/schema";
-import { asc, desc } from "drizzle-orm";
+import { dailyTable, propertiesTable, templateTable } from "../../../db/schema";
+import { asc, desc, inArray } from "drizzle-orm";
 
 export type DiaryTableTypes = {
     id: number,
@@ -23,8 +23,18 @@ export default function EntryBody() {
 
     useEffect(() => {
         async function fetchDiary() {
-            const result = await db.select().from(dailyTable).orderBy(desc(dailyTable.id));
-            setAllEntries(result);
+            const diaryEntries = await db.select().from(dailyTable).orderBy(desc(dailyTable.id));
+            const propertyList = await db.select().from(propertiesTable).where(inArray(propertiesTable.dailyEntryId, diaryEntries.map(d => d.id)))
+            const templateList = await db.select().from(templateTable)
+
+            const diaryDb = diaryEntries.map((d) => ({
+                ...d,
+                properties: propertyList.filter(p => p.dailyEntryId === d.id),
+                templateList: templateList,
+            }))
+
+ 
+            setAllEntries(diaryDb);
         };
 
         fetchDiary();
@@ -32,12 +42,12 @@ export default function EntryBody() {
 
     return(
             <View style={styles.entryBody}>
-                {allEntries.map((entry) => {
+                {allEntries.map((diary) => {
                     return (
-                        <View key={entry.id} >
-                            <EntryHeader entryProps={entry} />
-                            <EntryContent entryProps={entry} />
-                            <EntryProperties />
+                        <View key={diary.id} >
+                            <EntryHeader entryProps={diary} />
+                            <EntryContent entryProps={diary} />
+                            <EntryProperties entryProps={diary} />
                         </ View>
                     )
                 })}

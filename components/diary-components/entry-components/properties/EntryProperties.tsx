@@ -1,8 +1,35 @@
 import { View, Text, StyleSheet } from "react-native";
 import Dropdown from "./dropdowns/Dropdown";
 import MultiselectTemplate from "./multi-select/MultiselectTemplate";
+import { FC, useEffect, useState } from "react";
+import { propertiesTable, templateTable } from "../../../../db/schema";
+import { db } from "../../../../db";
+import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
 
-export default function EntryProperties() {
+type ComponentProperties = {
+    id: number,
+    variant: string,
+}
+
+export default function EntryProperties({ entryProps }: { entryProps: any }) {
+    const [template, setTemplate] = useState<ComponentProperties[]>([])
+
+    useEffect(() => {
+        const fetchTemplate = async () => {
+            const getTemplate = await db.select().from(templateTable)
+
+            setTemplate(getTemplate)
+        } 
+
+        fetchTemplate()
+    }, [])
+
+    const componentList: Record<string, FC<ComponentProperties>> = {
+        'box-toggle': BoxToggle,
+        'dropdown': Dropdown,
+        'multiselect': MultiselectTemplate
+    }
+
     return(
         <View style={{ paddingTop: 20 }}>
 
@@ -10,8 +37,12 @@ export default function EntryProperties() {
                 <Text style={styles.categoryName}>Category Name</Text>
 
                 <View style={{ display: 'flex', gap: 14 }}>
-                    <Dropdown />
-                    <MultiselectTemplate />
+                    {template.map((t) => {
+                        const Display = componentList[t.variant]
+                        if (!Display) return <View><Text>Not found</Text></ View>
+
+                        return <Display key={t.id} id={t.id} variant={t.variant}  />
+                    })}
                 </View>
             </View>
         </View>

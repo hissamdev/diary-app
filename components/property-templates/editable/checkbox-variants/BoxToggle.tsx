@@ -1,5 +1,5 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { db } from "../../../../db";
 import { dailyTable, propertiesTable, templateTable } from "../../../../db/schema";
@@ -12,46 +12,48 @@ type Props = {
     icon: string,
     color: string,
     variant: string,
-    data: any,
-    entryProps: DiaryTableTypes,
+    diaryProps: DiaryTableTypes,
 }
 
-const props = {
-        id: 'prop_1',
-        name: 'Workout Done',
-        icon: 'check',
-        color: '#10B981',
-        variant: 'box-toggle',
-        checked: true,
-    }
+// id is the current row id in template table
+// diaryProps is passed through route props
+export default function BoxToggle({ id, name, icon, color, variant, diaryProps }: Props) {
+    const [checked, setChecked] = useState<boolean>(false);
+    
+    useEffect(() => {
+        const fetchProertyRow = async () => {
+            const result = await db.select().from(propertiesTable).where(and(eq(propertiesTable.dailyEntryId, diaryProps.id), eq(propertiesTable.templatePropertyId, id)))
+            console.log("DB RESULT", result, "Is it checked? ", result[0].data.isChecked, "Template row: ", id)
+            setChecked(result[0].data.isChecked)
+        }
 
-export default function BoxToggle({ id, name, icon, color, data, variant, entryProps }: Props) {
-    const [checked, setChecked] = useState<boolean>(data.isChecked);
-    console.log(checked)
+        fetchProertyRow()
+    }, [checked])
+    
+    
 
     async function toggleCheck() {
         const newChecked = !checked;
         setChecked(newChecked);
 
         try {
-            await db.update(propertiesTable).set({ data: { isChecked: newChecked } }).where(and(eq(propertiesTable.templatePropertyId, id), eq(propertiesTable.dailyEntryId, entryProps.id)));
+            await db.update(propertiesTable)
+            .set({ data: { isChecked: newChecked } })
+            .where(and(eq(propertiesTable.dailyEntryId, diaryProps.id), eq(propertiesTable.templatePropertyId, id)))
 
-            console.log('id is: ', propertiesTable.id)
-            console.log('')
+            console.log("Updated data")
         } catch (err) {
-            console.error(err);
+            console.error("Error updating property: ", err);
         }
     }
 
     return (
-        <>
-            <Pressable onPress={toggleCheck} style={[styles.container, checked && styles.containerActive]}>
-                <View style={[styles.iconContainer, checked ? styles.iconActive : styles.iconInactive]}>
-                    <FontAwesome6 name={icon} size={12} color={checked ? 'white' : '#475569'} />
-                </View>
-                <Text style={[styles.text, checked ? styles.textActive : styles.textInactive]}>{name}</Text>
-            </Pressable>
-        </>
+        <Pressable onPress={toggleCheck} style={[styles.container, checked && { backgroundColor: `${color}1a`, borderColor: `${color}1a` }]}>
+            <View style={[styles.iconContainer, checked ? { backgroundColor: color } : styles.iconInactive]}>
+                <FontAwesome6 name={icon} size={12} color={checked ? 'white' : '#475569'} />
+            </View>
+            <Text style={[styles.text, checked ? styles.textActive : styles.textInactive]}>{name}</Text>
+        </Pressable>
     )
 }
 
@@ -73,11 +75,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
 
-    containerActive: {
-        backgroundColor: `${props.color}1a`,
-        borderColor: `${props.color}1a`
-    },
-
     iconContainer: {
         paddingLeft: 0.7,
         width: 24,
@@ -86,10 +83,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 7,
-    },
-
-    iconActive: {
-        backgroundColor: props.color,
     },
 
     iconInactive: {

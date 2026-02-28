@@ -45,20 +45,18 @@ export default function DailyCreate() {
     }
 
     return(
-        <>
-            <View style={{paddingTop: 38, paddingRight: 21, paddingLeft: 21}}>
-                <MainDate dateProps="Date" />
+        <View style={{paddingTop: 38, paddingRight: 21, paddingLeft: 21}}>
+            <MainDate dateProps="Date" />
 
-                <Pressable onPress={handleDailyEntry} style={styles.createBox}>
-                    <View style={styles.plusContainer}>
-                        <Plus color={'#94A3B8'} />
-                    </View>
+            <Pressable onPress={handleDailyEntry} style={styles.createBox}>
+                <View style={styles.plusContainer}>
+                    <Plus color={'#94A3B8'} />
+                </View>
 
-                    <Text style={styles.createBoxHeading}>How was your day, Name?</Text>
-                    <Text style={styles.createBoxSubheading}>Tap to write  today’s entry</Text>
-                </Pressable>
-            </View>
-        </>
+                <Text style={styles.createBoxHeading}>How was your day, Name?</Text>
+                <Text style={styles.createBoxSubheading}>Tap to write  today’s entry</Text>
+            </Pressable>
+        </View>
     )
 }
 

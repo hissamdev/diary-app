@@ -1,7 +1,12 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Dropdown() {
+type Props = {
+    id: number,
+    variant: string,
+}
+
+export default function Dropdown({ id, variant }: Props) {
     return(
         <View style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>

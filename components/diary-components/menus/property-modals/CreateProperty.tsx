@@ -10,7 +10,7 @@ type Props = {
     visible: boolean,
     onClose: () => void,
 }
-type PropertyType = 'checkbox' | 'dropdown' | 'slider' | null;
+type PropertyType = 'checkbox' | 'dropdown' | 'multiselect' | null;
 type PropertyArray = {
     id: PropertyType,
     text: string,
@@ -21,12 +21,12 @@ export default function CreateProperty({ visible, onClose }: Props) {
     const propertyTypes: PropertyArray[] = [
         { id: 'checkbox', text: 'Checkbox', icon: 'square-check' },
         { id: 'dropdown', text: 'Dropdown', icon: 'arrow-down' },
-        { id: 'slider', text: 'Slider', icon: 'sliders' }
+        { id: 'multiselect', text: 'Slider', icon: 'sliders' }
     ]
 
     const [propertyName, setPropertyName] = useState('');
     const [selectedType, setSelectedType] = useState<PropertyType>(null); // Consider setting default to checkbox
-    const [propertyVariant, setPropertyVariant] = useState('box-toggle');
+    const [propertyVariant, setPropertyVariant] = useState('dropdown');
     const [propertyIcon, setPropertyIcon] = useState('check');
     const [propertyColor, setPropertyColor] = useState('#10B9811a');
     const [propertyData, setPropertyData] = useState({ value: 'Option1', option: ['Option1', 'Option2'] }); // Default data will be passed through the creation process

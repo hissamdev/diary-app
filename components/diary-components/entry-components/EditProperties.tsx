@@ -1,7 +1,7 @@
 import { DiaryTableTypes } from "./EntryBody";
 import { FC, useEffect, useState } from "react";
 import { db } from "../../../db";
-import { templateTable } from "../../../db/schema";
+import { propertiesTable, templateTable } from "../../../db/schema";
 import { View, StyleSheet } from "react-native";
 
 // Property Components
@@ -14,20 +14,28 @@ type TemplateProperties = {
     icon: string,
     color: string,
     variant: string,
-    data: any,
-    entryProps: DiaryTableTypes,
+    diaryProps: DiaryTableTypes,
+    propertiesTable: any,
 };
 
 export default function EditProperties({ entryProps }: { entryProps: DiaryTableTypes }) {
     const [templateProperties, setTemplateProperties] = useState<TemplateProperties[]>([]);
-
+    
     useEffect(() => {
-        async function fetchTemplateProperties() {
+        async function fetchTemplate() {
             const result = await db.select().from(templateTable);
-            setTemplateProperties(result);
+            const fetchPropertyTable = await db.select().from(propertiesTable);
+            
+            const templateWithProperties = result.map(t => ({
+                ...t,
+                properties: fetchPropertyTable
+            }))
+
+            setTemplateProperties(templateWithProperties);
+            
         };
 
-        fetchTemplateProperties();
+        fetchTemplate();
     }, []);
 
     const componentList: Record<string, FC<TemplateProperties>> = {
@@ -39,7 +47,16 @@ export default function EditProperties({ entryProps }: { entryProps: DiaryTableT
             {templateProperties.map((p) => {
                 const Property = componentList[p.variant];
 
-                return <Property key={p.id} name={p.name} icon={p.icon} color={p.color}  data={p.data} id={p.id} variant={p.variant} entryProps={entryProps} />;
+                return <Property
+                    key={p.id}
+                    id={p.id}
+                    name={p.name}
+                    icon={p.icon}
+                    color={p.color}
+                    variant={p.variant}
+                    diaryProps={entryProps}
+                    propertiesTable={p.propertiesTable}
+                    />
             })}
         </View>
     )
