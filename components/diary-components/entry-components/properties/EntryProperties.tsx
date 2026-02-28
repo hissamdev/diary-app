@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
-import Dropdown from "./dropdowns/Dropdown";
-import MultiselectTemplate from "./multi-select/MultiselectTemplate";
 import { FC, useEffect, useState } from "react";
 import { propertiesTable, templateTable } from "../../../../db/schema";
 import { db } from "../../../../db";
-import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
+import CheckboxDisplay from "../../../property-templates/display/checkbox/CheckboxDisplay";
+import MultiselectDisplay from "../../../property-templates/display/multiselect/MultiselectDisplay";
+import DropdownDisplay from "../../../property-templates/display/dropdowns/DropdownDisplay";
 
 type ComponentProperties = {
     id: number,
@@ -25,9 +25,9 @@ export default function EntryProperties({ entryProps }: { entryProps: any }) {
     }, [])
 
     const componentList: Record<string, FC<ComponentProperties>> = {
-        'box-toggle': BoxToggle,
-        'dropdown': Dropdown,
-        'multiselect': MultiselectTemplate
+        'box-toggle': CheckboxDisplay,
+        'dropdown': DropdownDisplay,
+        'multiselect': MultiselectDisplay
     }
 
     return(
@@ -41,7 +41,7 @@ export default function EntryProperties({ entryProps }: { entryProps: any }) {
                         const Display = componentList[t.variant]
                         if (!Display) return <View><Text>Not found</Text></ View>
 
-                        return <Display key={t.id} id={t.id} variant={t.variant}  />
+                        return <Display key={t.id} id={t.id} name={t.name} color={t.color} icon={t.icon} variant={t.variant} diaryProps={entryProps}  />
                     })}
                 </View>
             </View>

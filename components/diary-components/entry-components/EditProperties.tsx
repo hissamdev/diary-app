@@ -6,6 +6,8 @@ import { View, StyleSheet } from "react-native";
 
 // Property Components
 import BoxToggle from "../../property-templates/editable/checkbox-variants/BoxToggle";
+import Dropdown from "../../property-templates/display/dropdowns/DropdownDisplay";
+import MultiselectTemplate from "../../property-templates/display/multiselect/MultiselectDisplay";
 
 
 type TemplateProperties = {
@@ -40,6 +42,8 @@ export default function EditProperties({ entryProps }: { entryProps: DiaryTableT
 
     const componentList: Record<string, FC<TemplateProperties>> = {
         'box-toggle': BoxToggle,
+        'dropdown': Dropdown,
+        'multiselect': MultiselectTemplate,
     }
 
     return (

@@ -1,12 +1,7 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 
-type Props = {
-    id: number,
-    variant: string,
-}
-
-export default function Dropdown({ id, variant }: Props) {
+export default function MultiselectDisplay({ name, color, icon }) {
     return(
         <View style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>
@@ -14,10 +9,10 @@ export default function Dropdown({ id, variant }: Props) {
                     <FontAwesome6 name="spa" color="#10B981" />
                 </View>
 
-                <Text>Property2</Text>
+                <Text>{name}</Text>
             </View>
             
-            <Text style={styles.dropdownBox}>Medium</Text>
+            <Text style={[styles.tag, {color: '#4F46E5', backgroundColor: '#4F46E51a'}]}>Casual</Text>
         </View>
     )
 }
@@ -45,14 +40,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#10B9811a',
     },
 
-    dropdownBox: {
-        fontSize: 11,
-        paddingTop: 5.25,
-        paddingRight: 57.25,
-        paddingBottom: 5.25,
+    tag: {
+        paddingTop: 3.5,
+        paddingRight: 8.75,
+        paddingBottom: 3.5,
         paddingLeft: 8.75,
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#00000025'
+        fontSize: 10.5,
+        fontWeight: 700,
+        letterSpacing: 0.45,
+        borderRadius: 3,
+        textTransform: 'uppercase'
     }
 })

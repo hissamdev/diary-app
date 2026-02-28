@@ -1,10 +1,12 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import Checkbox from "expo-checkbox";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function CheckboxTemplate() {
+type Props = {
+    id: number,
+    variant: string,
+}
 
-
+export default function DropdownDisplay({ name, color, icon }: Props) {
     return(
         <View style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>
@@ -12,10 +14,10 @@ export default function CheckboxTemplate() {
                     <FontAwesome6 name="spa" color="#10B981" />
                 </View>
 
-                <Text>Workout</Text>
+                <Text>{name}</Text>
             </View>
             
-            <Checkbox style={styles.checkbox} />
+            <Text style={styles.dropdownBox}>Medium</Text>
         </View>
     )
 }
@@ -43,8 +45,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#10B9811a',
     },
 
-    checkbox: {
-        borderWidth: 0,
-        backgroundColor: '#10B981',
+    dropdownBox: {
+        fontSize: 11,
+        paddingTop: 5.25,
+        paddingRight: 57.25,
+        paddingBottom: 5.25,
+        paddingLeft: 8.75,
+        borderWidth: 1,
+        borderRadius: 2,
+        borderColor: '#00000025'
     }
 })
