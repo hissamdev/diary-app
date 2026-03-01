@@ -1,9 +1,9 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function MultiselectDisplay({ name, color, icon }) {
+export default function MultiselectDisplay({ name, color, icon, handleDrag }) {
     return(
-        <View style={styles.container}>
+        <TouchableOpacity onLongPress={handleDrag} style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>
                 <View style={styles.propertyIcon}>
                     <FontAwesome6 name="spa" color="#10B981" />
@@ -13,12 +13,13 @@ export default function MultiselectDisplay({ name, color, icon }) {
             </View>
             
             <Text style={[styles.tag, {color: '#4F46E5', backgroundColor: '#4F46E51a'}]}>Casual</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 10,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',

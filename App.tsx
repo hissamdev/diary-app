@@ -1,5 +1,6 @@
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Platform, Text } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 //Components
 import Diary from './screens/Diary';
@@ -58,9 +59,11 @@ export default function App() {
   )
 
   return (
-      <SafeAreaProvider>
-        {isWeb ? appContent : <SQLiteProvider databaseName={DATABASE_NAME} options={{enableChangeListener: true}}>{appContent}</SQLiteProvider>}
-      </SafeAreaProvider>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
+          {isWeb ? appContent : <SQLiteProvider databaseName={DATABASE_NAME} options={{enableChangeListener: true}}>{appContent}</SQLiteProvider>}
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
   );
 }
 

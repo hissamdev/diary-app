@@ -8,6 +8,7 @@ import { View, StyleSheet } from "react-native";
 import BoxToggle from "../../property-templates/editable/checkbox-variants/BoxToggle";
 import Dropdown from "../../property-templates/display/dropdowns/DropdownDisplay";
 import MultiselectTemplate from "../../property-templates/display/multiselect/MultiselectDisplay";
+import ReorderProperties from "./properties/ReorderProperties";
 
 
 type TemplateProperties = {
@@ -25,15 +26,15 @@ export default function EditProperties({ entryProps }: { entryProps: DiaryTableT
     
     useEffect(() => {
         async function fetchTemplate() {
-            const result = await db.select().from(templateTable);
-            const fetchPropertyTable = await db.select().from(propertiesTable);
             
-            const templateWithProperties = result.map(t => ({
-                ...t,
-                properties: fetchPropertyTable
-            }))
+            try {
+                const result = await db.select().from(templateTable);
 
-            setTemplateProperties(templateWithProperties);
+                setTemplateProperties(result);
+                console.log("Fetched template table successfully")
+            } catch (error) {
+                console.error("Error fetching template table: ", error)
+            }
             
         };
 
@@ -48,20 +49,7 @@ export default function EditProperties({ entryProps }: { entryProps: DiaryTableT
 
     return (
         <View style={styles.container}>
-            {templateProperties.map((p) => {
-                const Property = componentList[p.variant];
-
-                return <Property
-                    key={p.id}
-                    id={p.id}
-                    name={p.name}
-                    icon={p.icon}
-                    color={p.color}
-                    variant={p.variant}
-                    diaryProps={entryProps}
-                    propertiesTable={p.propertiesTable}
-                    />
-            })}
+            <ReorderProperties diaryProps={entryProps} />
         </View>
     )
 }

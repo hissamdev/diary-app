@@ -1,14 +1,14 @@
 import { FontAwesome6 } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
     id: number,
     variant: string,
 }
 
-export default function DropdownDisplay({ name, color, icon }: Props) {
+export default function DropdownDisplay({ name, color, icon, handleDrag }: Props) {
     return(
-        <View style={styles.container}>
+        <TouchableOpacity onLongPress={handleDrag} style={styles.container}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10.5 }}>
                 <View style={styles.propertyIcon}>
                     <FontAwesome6 name="spa" color="#10B981" />
@@ -18,12 +18,13 @@ export default function DropdownDisplay({ name, color, icon }: Props) {
             </View>
             
             <Text style={styles.dropdownBox}>Medium</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 10,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',

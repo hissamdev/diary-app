@@ -5,6 +5,7 @@ import CreateProperty from "./CreateProperty";
 import { useState, useRef, useEffect, FC } from "react";
 import Popover, { PopoverMode, PopoverPlacement, Rect } from "react-native-popover-view";
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist'
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Components
 import BoxToggle from "../../../property-templates/editable/checkbox-variants/BoxToggle";
@@ -42,9 +43,10 @@ export default function PropertySettings({ visible, onClose }: Props) {
     useEffect(() => {
         async function fetchTemplate() {
             try {
-                const result = await db.select().from(templateTable);
+                const result = await db.select().from(templateTable).orderBy(templateTable.position);
 
                 setTemplate(result);
+                console.log("Template fetched and stored in state, array", Array.isArray(result), result.length)
             } catch (err) {
                 console.error('Error fetching template, ', err);
             };
@@ -59,32 +61,32 @@ export default function PropertySettings({ visible, onClose }: Props) {
         'multiselect': MultiselectDisplay,
     };
 
-    const handleDragEnd = async (newData) => {
+    const handleDragEnd = async (newData: Properties[]) => {
+        console.log("handleDragEnd reached, type: ", typeof newData)
+
+        if (!newData) return;
+        console.log(newData)
         setTemplate(newData)
 
         try {
             await db.transaction(async (tx) => {
                 for (let i = 0; i < newData.length; i++) {
-                    await tx
-                        .update(templateTable)
-                        .set({ order: i })
-                        .where(eq(templateTable.id, newData[i].id))
+                    const item = newData[i]
+                    if (item && item.id) {
+                        await tx
+                            .update(templateTable)
+                            .set({ position: i })
+                            .where(eq(templateTable.id, item.id))
+                    }
                 }
             })
         } catch (error) {
             console.error("Failed to persist order: ", error)
         }
-        await db.transaction(async (tx) => {
-            for (let i = 0; i < newData.length; i++) {
-                await tx
-                    .update(templateTable)
-                    .set({ order: i })
-                    .where(eq(templateTable.id, newData[i].id))
-            }
-        })
     }
 
     const renderItem = ({ item, drag, isActive }) => {
+
         const Property = componentList[item.variant];
         if (!Property) return <Text>Not Found</ Text>
 
@@ -93,11 +95,8 @@ export default function PropertySettings({ visible, onClose }: Props) {
                 <TouchableOpacity
                     onLongPress={drag}
                     disabled={isActive}
-
-
                 >
                     <Property
-                        key={item.id}
                         id={item.id}
                         name={item.name}
                         icon={item.icon}
@@ -114,7 +113,9 @@ export default function PropertySettings({ visible, onClose }: Props) {
     return (
         <>
             <Modal
-                isVisible={visible} onBackdropPress={onClose}
+                isVisible={visible}
+                onBackdropPress={onClose}
+                propagateSwipe={true}
                 style={styles.container}>
                 <View style={styles.modalContent}>
                     <View style={styles.modalHeader}>
@@ -131,15 +132,8 @@ export default function PropertySettings({ visible, onClose }: Props) {
 
                         <Pressable style={{width: 28, height: 28, display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: '#94A3B8', borderRadius: 7, borderWidth: 1}}><FontAwesome6 name={'gear'} size={12} color={'#94A3B8'} /></Pressable>
                     </View>
-
-                    <View style={styles.modalBody}>
-                        <DraggableFlatList
-                            data={template}
-                            onDragEnd={({data}) => handleDragEnd(data)}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={renderItem}
-                        />
-                    </View>
+                        <View style={styles.modalBody}>
+                        </View>
                 </View>
                 
                 {/* @ts-ignore */}

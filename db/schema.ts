@@ -17,6 +17,7 @@ export const templateTable = sqliteTable("templateTable", {
     variant: text().notNull(),
     icon: text(),
     color: text(),
+    position: integer(),
     data: text({ mode: 'json' }).notNull(),
 });
 

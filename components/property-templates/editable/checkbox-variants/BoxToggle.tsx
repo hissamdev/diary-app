@@ -17,20 +17,30 @@ type Props = {
 
 // id is the current row id in template table
 // diaryProps is passed through route props
-export default function BoxToggle({ id, name, icon, color, variant, diaryProps }: Props) {
+export default function BoxToggle({ id, name, icon, color, variant, diaryProps, handleDrag }: Props) {
     const [checked, setChecked] = useState<boolean>(false);
+    if (!diaryProps?.id) return console.warn("Missing diaryProps.id!")
     
     useEffect(() => {
         const fetchProertyRow = async () => {
-            const result = await db.select().from(propertiesTable).where(and(eq(propertiesTable.dailyEntryId, diaryProps.id), eq(propertiesTable.templatePropertyId, id)))
-            console.log("DB RESULT", result, "Is it checked? ", result[0].data.isChecked, "Template row: ", id)
-            setChecked(result[0].data.isChecked)
+            try {
+                const result = await db
+                    .select()
+                    .from(propertiesTable)
+                    .where(and(eq(propertiesTable.dailyEntryId, diaryProps.id), eq(propertiesTable.templatePropertyId, id)))
+                
+                setChecked(result[0].data.isChecked)
+                console.log("Property row fetched")
+                } catch (error) {
+                console.error("Failed to fetch property row, ", error)
+            }
+
+            
         }
 
         fetchProertyRow()
+        
     }, [checked])
-    
-    
 
     async function toggleCheck() {
         const newChecked = !checked;
@@ -41,14 +51,14 @@ export default function BoxToggle({ id, name, icon, color, variant, diaryProps }
             .set({ data: { isChecked: newChecked } })
             .where(and(eq(propertiesTable.dailyEntryId, diaryProps.id), eq(propertiesTable.templatePropertyId, id)))
 
-            console.log("Updated data")
+            console.log("Updated data", "id: ", diaryProps.id, "propId: ", id)
         } catch (err) {
-            console.error("Error updating property: ", err);
+            console.error("Error updating property: ", err, "id: ", diaryProps.id, "propId: ", id);
         }
     }
 
     return (
-        <Pressable onPress={toggleCheck} style={[styles.container, checked && { backgroundColor: `${color}1a`, borderColor: `${color}1a` }]}>
+        <Pressable onPress={toggleCheck} onLongPress={handleDrag} style={[styles.container, checked && { backgroundColor: `${color}1a`, borderColor: `${color}1a` }]}>
             <View style={[styles.iconContainer, checked ? { backgroundColor: color } : styles.iconInactive]}>
                 <FontAwesome6 name={icon} size={12} color={checked ? 'white' : '#475569'} />
             </View>
@@ -59,6 +69,7 @@ export default function BoxToggle({ id, name, icon, color, variant, diaryProps }
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 10,
         paddingLeft: 20.5,
         width: '100%',
         height: 45,
