@@ -1,14 +1,10 @@
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ActivityIndicator, Platform, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 //Components
 import Diary from './screens/Diary/Diary';
 import EditPage from './screens/Diary/EditPage';
-
-// Navigation
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // db
 import { SQLiteProvider } from 'expo-sqlite';
@@ -19,7 +15,12 @@ import migrations from './drizzle/migrations';
 import {useDrizzleStudio} from 'expo-drizzle-studio-plugin';
 import { DiaryTableTypes } from './components/diary-components/entry-components/EntryBody';
 
-// 'Edit' should match the navigator name string
+// Navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Necessary types for screen names.
+// e.g. 'Edit' should match the navigator name string
 export type RootStackParamList = {
   DiarySection: undefined,
   Diary: undefined,
@@ -31,6 +32,7 @@ export type RootStackParamList = {
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const DiaryStack = createNativeStackNavigator<RootStackParamList>();
 
+// Grouped stack for diary screens
 function DiaryNavigator() {
   return (
     <DiaryStack.Navigator>
@@ -44,6 +46,7 @@ export default function App() {
   const isWeb = Platform.OS === 'web';
   const { success, error } = useMigrations(db, migrations);
   useDrizzleStudio(expoDb);
+
   if (!isWeb && error) {
     return (
       <SafeAreaProvider>
@@ -51,7 +54,6 @@ export default function App() {
       </SafeAreaProvider>
     )
   }
-
   if (!isWeb && !success) {
     return (
       <SafeAreaProvider>
@@ -60,6 +62,7 @@ export default function App() {
     );
   }
 
+  // Separated for conditional rendering
   const appContent = (
       <NavigationContainer>
         <RootStack.Navigator screenOptions={{ headerShown: false }} >
