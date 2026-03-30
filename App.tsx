@@ -3,8 +3,8 @@ import { ActivityIndicator, Platform, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 //Components
-import Diary from './screens/Diary';
-import EditPage from './screens/EditPage';
+import Diary from './screens/Diary/Diary';
+import EditPage from './screens/Diary/EditPage';
 
 // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,18 +21,29 @@ import { DiaryTableTypes } from './components/diary-components/entry-components/
 
 // 'Edit' should match the navigator name string
 export type RootStackParamList = {
+  DiarySection: undefined,
   Diary: undefined,
   Edit: {
     entryProps: DiaryTableTypes,
   }
 }
 
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+const DiaryStack = createNativeStackNavigator<RootStackParamList>();
+
+function DiaryNavigator() {
+  return (
+    <DiaryStack.Navigator>
+      <DiaryStack.Screen name="Diary" component={Diary} />
+      <DiaryStack.Screen name="Edit" component={EditPage} />
+    </DiaryStack.Navigator>
+  )
+}
 
 export default function App() {
   const isWeb = Platform.OS === 'web';
   const { success, error } = useMigrations(db, migrations);
   useDrizzleStudio(expoDb);
-
   if (!isWeb && error) {
     return (
       <SafeAreaProvider>
@@ -51,10 +62,10 @@ export default function App() {
 
   const appContent = (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} >
-          <Stack.Screen name="Diary" component={Diary} />
-          <Stack.Screen name="Edit" component={EditPage} />
-        </Stack.Navigator>
+        <RootStack.Navigator screenOptions={{ headerShown: false }} >
+          <RootStack.Screen name="DiarySection" component={DiaryNavigator} />
+          <RootStack.Screen name="DiarySection" component={DiaryNavigator} />
+        </RootStack.Navigator>
       </NavigationContainer>
   )
 
@@ -67,4 +78,3 @@ export default function App() {
   );
 }
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
