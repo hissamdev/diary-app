@@ -18,6 +18,7 @@ import { DiaryTableTypes } from './components/diary-components/entry-components/
 // Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 // Necessary types for screen names.
 // e.g. 'Edit' should match the navigator name string
@@ -31,6 +32,7 @@ export type RootStackParamList = {
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const DiaryStack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator()
 
 // Grouped stack for diary screens
 function DiaryNavigator() {
