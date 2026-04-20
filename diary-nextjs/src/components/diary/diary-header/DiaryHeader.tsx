@@ -6,8 +6,8 @@ export default function DiaryHeader() {
                     <li className="font-[550] font-semi cursor-pointer transition-all hover:text-purple-600 hover:-translate-y-0.5 hover:border-b hover:border-b-purple-600">
                         Diary Entries
                     </li>
+                    <li>Notes</li>
                     <li>Milestones</li>
-                    <li>Diary Entries</li>
                 </ul>
             </div>
         </header>
