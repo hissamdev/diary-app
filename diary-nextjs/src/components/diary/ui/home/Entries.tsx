@@ -1,5 +1,5 @@
 import { ArrowRight, Edit } from "lucide-react";
-import DiaryHeader from "../diary-header/DiaryHeader";
+import DiaryHeader from "../../diary-header/DiaryHeader";
 
 export default function Entries() {
     return (
