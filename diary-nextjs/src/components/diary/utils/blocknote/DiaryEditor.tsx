@@ -11,6 +11,8 @@ import "@blocknote/mantine/style.css";
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
+import { db } from "@/utils/db";
+import { journalEntry } from "@/utils/schema";
 
 const retrievedData = [
     {

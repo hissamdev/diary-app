@@ -4,7 +4,7 @@ import Entries from "./Entries";
 
 export default function DiaryHome() {
     return (
-        <section className="bg-white flex h-screen">
+        <section className="bg-white flex">
             <DiarySidebar />
             <Entries />
             <DiarySidebarRight />

@@ -1,4 +1,10 @@
 "use server";
 
 import { db } from "@/utils/db";
-import { usersTable } from "@/utils/schema";
+import { journalEntry, usersTable } from "@/utils/schema";
+
+export async function getEntries() {
+    const entries = await db.select().from(journalEntry);
+
+    return entries;
+}
