@@ -15,4 +15,9 @@ CREATE TABLE "journal_entries" (
 	"is_property_modified" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "users_table" ADD COLUMN "created_at" date DEFAULT now();
+CREATE TABLE "users_table" (
+	"id" serial PRIMARY KEY,
+	"email" text NOT NULL UNIQUE,
+	"name" text,
+	"created_at" date DEFAULT now()
+);

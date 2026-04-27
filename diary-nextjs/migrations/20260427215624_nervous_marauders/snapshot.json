@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "510d01c2-ecd8-4bd7-b20b-c387f9715ad0",
+  "id": "e7b36612-ba5b-4f3d-909c-8b9244e5308e",
   "prevIds": [
-    "6c5dfd1a-c3a1-4d2b-b6c5-535c3fdca94c"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -245,7 +245,7 @@
         "email"
       ],
       "nullsNotDistinct": false,
-      "name": "users_table_email_unique",
+      "name": "users_table_email_key",
       "schema": "public",
       "table": "users_table",
       "entityType": "uniques"
