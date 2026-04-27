@@ -2,8 +2,8 @@ import {
     boolean,
     date,
     integer,
+    json,
     pgTable,
-    primaryKey,
     serial,
     text,
 } from "drizzle-orm/pg-core";
@@ -20,17 +20,19 @@ export type SelectUser = typeof usersTable.$inferSelect;
 
 export const journalEntry = pgTable("journal_entries", {
     id: serial("id").primaryKey(),
-    content: text(),
     createdAt: date("created_at").defaultNow().notNull(),
     lastUpdated: date("last_updated").defaultNow().notNull(),
     // If properties are unmodified, we will set properties based on tags later inserted.
-    isPropertiesUserModified: boolean("is_property_modified")
+    isPropertyModified: boolean("is_property_modified")
         .default(false)
         .notNull(),
 });
 
-export const journalBlocks = pgTable("journal_blocks", {
-    id: serial().primaryKey(),
-    type: text(),
-    position: integer().notNull(),
+export const journalBlock = pgTable("journal_blocks", {
+    position: integer(),
+    id: text().notNull(),
+    type: text().notNull(),
+    props: json(),
+    content: json(),
+    children: json(),
 });
