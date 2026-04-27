@@ -1,3 +1,4 @@
+import { defineRelations } from "drizzle-orm";
 import {
     boolean,
     date,
@@ -29,6 +30,7 @@ export const journalEntry = pgTable("journal_entries", {
 });
 
 export const journalBlock = pgTable("journal_blocks", {
+    entryId: integer("entry_id").notNull(),
     position: integer(),
     id: text().notNull(),
     type: text().notNull(),
@@ -36,3 +38,18 @@ export const journalBlock = pgTable("journal_blocks", {
     content: json(),
     children: json(),
 });
+
+export const relations = defineRelations(
+    { journalEntry, journalBlock },
+    (r) => ({
+        journalBlock: {
+            entry: r.one.journalBlock({
+                from: r.journalBlock.entryId,
+                to: r.journalEntry.id,
+            }),
+        },
+        journalEntry: {
+            blocks: r.many.journalEntry(),
+        },
+    }),
+);
