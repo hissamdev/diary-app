@@ -43,13 +43,13 @@ export const relations = defineRelations(
     { journalEntry, journalBlock },
     (r) => ({
         journalBlock: {
-            entry: r.one.journalBlock({
+            entry: r.one.journalEntry({
                 from: r.journalBlock.entryId,
                 to: r.journalEntry.id,
             }),
         },
         journalEntry: {
-            blocks: r.many.journalEntry(),
+            blocks: r.many.journalBlock(),
         },
     }),
 );
