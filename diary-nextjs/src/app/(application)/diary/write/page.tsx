@@ -2,10 +2,16 @@
 
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
 import { DynamicEditor } from "@/components/diary/utils/blocknote/DynamicEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Write() {
     const [saving, setSaving] = useState<boolean>(false);
+    const [entryId, setEntryId] = useState<string | null>("");
+
+    useEffect(() => {
+        const id = localStorage.getItem("entryId");
+        setEntryId(id);
+    }, []);
 
     return (
         <section className="bg-[#1e1e1e] min-h-screen flex">
@@ -13,7 +19,7 @@ export default function Write() {
             <div className="w-full">
                 <div className="max-w-7xl px-14 w-full mx-auto py-4 flex justify-between items-center text-sm font-inter">
                     <div>
-                        <p>Entry Id: {localStorage.getItem("entryId")}</p>
+                        <p>Entry Id: {entryId}</p>
                     </div>
                     <div className="w-12">
                         {saving ? (

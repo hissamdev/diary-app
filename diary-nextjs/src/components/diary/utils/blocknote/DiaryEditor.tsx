@@ -1,6 +1,5 @@
 "use client";
 
-import { Block } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 // Or, you can use ariakit, shadcn, etc.
 import { BlockNoteView } from "@blocknote/mantine";
@@ -11,15 +10,8 @@ import "@blocknote/mantine/style.css";
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
-import { db } from "@/utils/db";
-import { journalBlock, journalEntry } from "@/utils/schema";
-import {
-    createEntry,
-    getBlocks,
-    propagateBlockUpdates,
-} from "@/actions/actions";
-import { useEntryContext } from "../context/entry/EntryContext";
-import { redirect } from "next/navigation";
+import { getBlocks, propagateBlockUpdates } from "@/actions/actions";
+import { useRouter } from "next/navigation";
 
 const retrievedData = [
     {
@@ -107,32 +99,29 @@ export default function DiaryEditor({
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [data, setData] = useState<any[]>([]);
-    const id = Number(localStorage.getItem("entryId"));
-    if (!id) redirect("/diary");
-
-    // useEffect(() => {
-    //     const load = async () => {
-    //         const blocks = await getBlocks(id);
-    //         console.log("Returned blocks: ", JSON.stringify(blocks));
-    //         setData(blocks);
-
-    //         await propagateBlockUpdates();
-    //     };
-
-    //     load();
-    // }, []);
+    const [id, setId] = useState<number>(0);
+    const router = useRouter();
+    useEffect(() => {
+        const id = Number(localStorage.getItem("entryId"));
+        if (!id) {
+            router.push("/diary");
+            return;
+        }
+        setId(id);
+    }, []);
 
     useEffect(() => {
-        console.log("Saving...");
+        if (!id || data.length === 0) return;
+        console.log("Saving the following blocks: ", data);
         setSaving(true);
 
         const debounce = setTimeout(async () => {
-            const res = await propagateBlockUpdates(editor.document);
+            const res = await propagateBlockUpdates(data, id);
             if (res?.success) {
                 console.log(res.message);
                 setSaving(false);
             } else {
-                console.error(res?.message);
+                console.error(res?.message, "Error: ", res.error);
             }
         }, 1000);
 
@@ -140,20 +129,19 @@ export default function DiaryEditor({
     }, [data]);
 
     const editor = useCreateBlockNote();
-
     editor.onMount(async () => {
-        const blocks = await getBlocks(id);
+        const blocks = await getBlocks(Number(localStorage.getItem("entryId")));
+        if (!blocks) return;
+        console.log("Blocks received in front end: ", blocks);
         setData(blocks);
+
         if (blocks.length > 0) {
-            console.log("Data exists: ", blocks);
+            console.log("Blocks exist: ", blocks);
 
-            const defaultIdArray = editor.document.map((block) => block.id);
-            console.log("Extracted editor.document: ", defaultIdArray);
-
-            if (data) {
-                editor.replaceBlocks(defaultIdArray, blocks);
-                console.log("Replaced existing blocks with :", blocks);
-            }
+            const defaultBlockIds = editor.document.map((block) => block.id);
+            // @ts-ignore
+            editor.replaceBlocks(defaultBlockIds, blocks);
+            console.log("Replaced existing blocks with: ", blocks);
         }
     });
 
