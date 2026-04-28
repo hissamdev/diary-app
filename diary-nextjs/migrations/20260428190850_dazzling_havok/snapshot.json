@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "e7b36612-ba5b-4f3d-909c-8b9244e5308e",
+  "id": "da30f3f0-3854-4103-8c8a-29d64bfb5861",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -38,9 +38,22 @@
       "table": "journal_blocks"
     },
     {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "primary_key",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "journal_blocks"
+    },
+    {
       "type": "integer",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -221,6 +234,16 @@
     },
     {
       "columns": [
+        "primary_key"
+      ],
+      "nameExplicit": false,
+      "name": "journal_blocks_pkey",
+      "schema": "public",
+      "table": "journal_blocks",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
         "id"
       ],
       "nameExplicit": false,
@@ -238,6 +261,17 @@
       "schema": "public",
       "table": "users_table",
       "entityType": "pks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "journal_blocks_id_key",
+      "schema": "public",
+      "table": "journal_blocks",
+      "entityType": "uniques"
     },
     {
       "nameExplicit": false,

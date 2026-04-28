@@ -31,7 +31,7 @@ export default async function Entries() {
                     </span>
                 </div>
 
-                <div className="grid gap-y-5">
+                <div className="grid grid-cols-1 gap-y-5">
                     {entries.map((entry) => {
                         return (
                             <div key={entry.id} className="entry mt-7">
@@ -49,7 +49,7 @@ export default async function Entries() {
                                 </div>
                                 <div className="mt-4 rounded-lg border border-indigo-600/40 px-6 py-7">
                                     <h2 className="text-lg font-bold text-black">
-                                        Title goes here
+                                        Title goes here and id is {entry.id}
                                     </h2>
                                     <p className="mt-3 text-black">
                                         First couple lines of the diary go here

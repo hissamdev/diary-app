@@ -11,7 +11,10 @@ export default function Write() {
         <section className="bg-[#1e1e1e] min-h-screen flex">
             <EditSidebar />
             <div className="w-full">
-                <div className="max-w-7xl w-full mx-auto py-4 flex justify-end items-center text-sm font-inter">
+                <div className="max-w-7xl px-14 w-full mx-auto py-4 flex justify-between items-center text-sm font-inter">
+                    <div>
+                        <p>Entry Id: {localStorage.getItem("entryId")}</p>
+                    </div>
                     <div className="w-12">
                         {saving ? (
                             <p className="text-gray-400">Saving...</p>

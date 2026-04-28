@@ -12,8 +12,12 @@ import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
 import { db } from "@/utils/db";
-import { journalEntry } from "@/utils/schema";
-import { getBlocks } from "@/actions/actions";
+import { journalBlock, journalEntry } from "@/utils/schema";
+import {
+    createEntry,
+    getBlocks,
+    propagateBlockUpdates,
+} from "@/actions/actions";
 import { useEntryContext } from "../context/entry/EntryContext";
 import { redirect } from "next/navigation";
 
@@ -106,31 +110,51 @@ export default function DiaryEditor({
     const id = Number(localStorage.getItem("entryId"));
     if (!id) redirect("/diary");
 
-    useEffect(() => {
-        const load = async () => {
-            const blocks = await getBlocks(id);
-            console.log("Returned blocks: ", JSON.stringify(blocks));
-            setData(blocks);
-        };
+    // useEffect(() => {
+    //     const load = async () => {
+    //         const blocks = await getBlocks(id);
+    //         console.log("Returned blocks: ", JSON.stringify(blocks));
+    //         setData(blocks);
 
-        load();
-    }, []);
+    //         await propagateBlockUpdates();
+    //     };
+
+    //     load();
+    // }, []);
 
     useEffect(() => {
         console.log("Saving...");
         setSaving(true);
-        const debounce = setTimeout(() => {
-            console.log("Saved!");
-            setSaving(false);
+
+        const debounce = setTimeout(async () => {
+            const res = await propagateBlockUpdates(editor.document);
+            if (res?.success) {
+                console.log(res.message);
+                setSaving(false);
+            } else {
+                console.error(res?.message);
+            }
         }, 1000);
 
         return () => clearTimeout(debounce);
     }, [data]);
 
-    console.log("Data before hook: ", data);
-    const safeEmpty = data.length > 0 ? data : [{}];
-    const editor = useCreateBlockNote({
-        initialContent: safeEmpty,
+    const editor = useCreateBlockNote();
+
+    editor.onMount(async () => {
+        const blocks = await getBlocks(id);
+        setData(blocks);
+        if (blocks.length > 0) {
+            console.log("Data exists: ", blocks);
+
+            const defaultIdArray = editor.document.map((block) => block.id);
+            console.log("Extracted editor.document: ", defaultIdArray);
+
+            if (data) {
+                editor.replaceBlocks(defaultIdArray, blocks);
+                console.log("Replaced existing blocks with :", blocks);
+            }
+        }
     });
 
     const darkTheme = {

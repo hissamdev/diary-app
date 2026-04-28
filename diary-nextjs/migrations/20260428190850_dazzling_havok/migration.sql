@@ -1,7 +1,8 @@
 CREATE TABLE "journal_blocks" (
 	"entry_id" integer NOT NULL,
-	"position" integer,
-	"id" text NOT NULL,
+	"primary_key" serial PRIMARY KEY,
+	"position" integer NOT NULL,
+	"id" text NOT NULL UNIQUE,
 	"type" text NOT NULL,
 	"props" json,
 	"content" json,

@@ -7,6 +7,7 @@ import {
     pgTable,
     serial,
     text,
+    uuid,
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users_table", {
@@ -30,8 +31,9 @@ export const journalEntry = pgTable("journal_entries", {
 });
 
 export const journalBlock = pgTable("journal_blocks", {
+    primaryKey: serial("primary_key").primaryKey(),
     entryId: integer("entry_id").notNull(),
-    position: integer(),
+    position: integer().notNull(),
     id: text().notNull().unique(),
     type: text().notNull(),
     props: json(),
