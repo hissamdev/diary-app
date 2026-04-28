@@ -1,6 +1,8 @@
 import { ArrowRight, Edit } from "lucide-react";
 import DiaryHeader from "../../diary-header/DiaryHeader";
 import { getEntries } from "@/actions/actions";
+import { useEntryContext } from "../../utils/context/entry/EntryContext";
+import { EditEntry } from "./EntryEdit";
 
 export default async function Entries() {
     const entries = await getEntries();
@@ -29,11 +31,11 @@ export default async function Entries() {
                     </span>
                 </div>
 
-                <div className="grid">
+                <div className="grid gap-y-5">
                     {entries.map((entry) => {
                         return (
-                            <div className="entry mt-4">
-                                <div className="flex items-center gap-6">
+                            <div key={entry.id} className="entry mt-7">
+                                <div className="flex items-center justify-between gap-6">
                                     <div className="flex items-center gap-3">
                                         <h4 className="text-lg font-bold text-black">
                                             Today, Apr 10 {entry.createdAt}
@@ -43,10 +45,7 @@ export default async function Entries() {
                                         </span>
                                     </div>
                                     <span className="aspect-square w-2 rounded-full bg-gray-300"></span>
-                                    <div className="flex cursor-pointer items-center gap-1 rounded bg-indigo-100 px-2 py-0.5 text-[12px] font-bold tracking-wide text-indigo-600 uppercase transition-colors hover:bg-indigo-100/70">
-                                        <Edit className="w-3" />
-                                        Edit
-                                    </div>
+                                    <EditEntry entryId={entry.id} />
                                 </div>
                                 <div className="mt-4 rounded-lg border border-indigo-600/40 px-6 py-7">
                                     <h2 className="text-lg font-bold text-black">

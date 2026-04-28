@@ -22,7 +22,9 @@ const EntryContextProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 const useEntryContext = () => {
-    return useContext(EntryContext);
+    const ctx = useContext(EntryContext);
+    if (!ctx) throw new Error("useEntryContext must be used inside provider");
+    return ctx;
 };
 
 export { EntryContextProvider, useEntryContext };
