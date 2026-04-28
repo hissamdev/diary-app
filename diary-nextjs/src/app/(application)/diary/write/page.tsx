@@ -21,7 +21,7 @@ export default function Write() {
                     </div>
                 </div>
                 <div className="mx-auto mt-16 max-w-7xl w-full ">
-                    <DynamicEditor saving={saving} setSaving={setSaving} />
+                    <DynamicEditor setSaving={setSaving} />
                 </div>
             </div>
         </section>

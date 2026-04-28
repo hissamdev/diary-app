@@ -18,8 +18,8 @@ export async function getBlocks(id: number) {
         .where(eq(journalBlock.entryId, id));
 
     if (blocks.length === 0) {
-        console.error("No matching blocks were found: ");
-        return [];
+        console.error("No matching blocks were found");
+        return [{}];
     }
 
     return blocks;

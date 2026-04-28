@@ -32,7 +32,7 @@ export const journalEntry = pgTable("journal_entries", {
 export const journalBlock = pgTable("journal_blocks", {
     entryId: integer("entry_id").notNull(),
     position: integer(),
-    id: text().notNull(),
+    id: text().notNull().unique(),
     type: text().notNull(),
     props: json(),
     content: json(),

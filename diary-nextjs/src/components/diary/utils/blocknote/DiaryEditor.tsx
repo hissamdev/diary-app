@@ -98,10 +98,8 @@ const retrievedData = [
 ];
 
 export default function DiaryEditor({
-    saving,
     setSaving,
 }: {
-    saving: boolean;
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [data, setData] = useState<any[]>([]);
@@ -129,22 +127,10 @@ export default function DiaryEditor({
         return () => clearTimeout(debounce);
     }, [data]);
 
+    console.log("Data before hook: ", data);
+    const safeEmpty = data.length > 0 ? data : [{}];
     const editor = useCreateBlockNote({
-        initialContent: [
-            {
-                id: "726e5145-bc2d-4343-b6a5-5229f2bad5a0",
-                type: "paragraph",
-                props: {
-                    backgroundColor: "default",
-                    textColor: "default",
-                    textAlignment: "left",
-                },
-                content: [
-                    { type: "text", text: "Initial text here", styles: {} },
-                ],
-                children: [],
-            },
-        ],
+        initialContent: safeEmpty,
     });
 
     const darkTheme = {
