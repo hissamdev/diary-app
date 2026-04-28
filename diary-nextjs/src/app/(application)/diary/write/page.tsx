@@ -1,18 +1,27 @@
+"use client";
+
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
 import { DynamicEditor } from "@/components/diary/utils/blocknote/DynamicEditor";
-import { Suspense } from "react";
+import { useState } from "react";
 
 export default function Write() {
+    const [saving, setSaving] = useState<boolean>(false);
+
     return (
-        <section className="py-32 bg-[#1e1e1e] min-h-screen">
+        <section className="bg-[#1e1e1e] min-h-screen flex">
             <EditSidebar />
-            <div className="">
-                <div className="mx-auto max-w-4xl">
-                    <Suspense
-                        fallback={<p className="text-white">Loading...</p>}
-                    >
-                        <DynamicEditor />
-                    </Suspense>
+            <div className="w-full">
+                <div className="max-w-7xl w-full mx-auto py-4 flex justify-end items-center text-sm font-inter">
+                    <div className="w-12">
+                        {saving ? (
+                            <p className="text-gray-400">Saving...</p>
+                        ) : (
+                            <p className="text-gray-400 font-inter">Saved</p>
+                        )}
+                    </div>
+                </div>
+                <div className="mx-auto mt-16 max-w-7xl w-full ">
+                    <DynamicEditor saving={saving} setSaving={setSaving} />
                 </div>
             </div>
         </section>

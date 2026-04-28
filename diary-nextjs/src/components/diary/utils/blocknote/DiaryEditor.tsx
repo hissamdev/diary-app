@@ -13,6 +13,9 @@ import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
 import { db } from "@/utils/db";
 import { journalEntry } from "@/utils/schema";
+import { getBlocks } from "@/actions/actions";
+import { useEntryContext } from "../context/entry/EntryContext";
+import { redirect } from "next/navigation";
 
 const retrievedData = [
     {
@@ -94,19 +97,33 @@ const retrievedData = [
     },
 ];
 
-export default function DiaryEditor() {
-    const [data, setData] = useState<Block[]>([]);
+export default function DiaryEditor({
+    saving,
+    setSaving,
+}: {
+    saving: boolean;
+    setSaving: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+    const [data, setData] = useState<any[]>([]);
+    const id = Number(localStorage.getItem("entryId"));
+    if (!id) redirect("/diary");
 
     useEffect(() => {
-        const showLog = () => {
-            console.log(JSON.stringify(data));
+        const load = async () => {
+            const blocks = await getBlocks(id);
+            console.log("Returned blocks: ", JSON.stringify(blocks));
+            setData(blocks);
         };
 
+        load();
+    }, []);
+
+    useEffect(() => {
         console.log("Saving...");
+        setSaving(true);
         const debounce = setTimeout(() => {
-            if (data) {
-                showLog();
-            }
+            console.log("Saved!");
+            setSaving(false);
         }, 1000);
 
         return () => clearTimeout(debounce);
@@ -114,8 +131,19 @@ export default function DiaryEditor() {
 
     const editor = useCreateBlockNote({
         initialContent: [
-            { type: "paragraph", content: "Initial text here" },
-            { type: "paragraph", content: "Initial text here" },
+            {
+                id: "726e5145-bc2d-4343-b6a5-5229f2bad5a0",
+                type: "paragraph",
+                props: {
+                    backgroundColor: "default",
+                    textColor: "default",
+                    textAlignment: "left",
+                },
+                content: [
+                    { type: "text", text: "Initial text here", styles: {} },
+                ],
+                children: [],
+            },
         ],
     });
 
@@ -135,7 +163,7 @@ export default function DiaryEditor() {
                 onChange={() => {
                     setData(editor.document);
                 }}
-                className="[&>.bn-editor]:min-h-120"
+                className="[&>.bn-editor]:min-h-120 w-full"
                 theme={{
                     light: darkTheme,
                     dark: darkTheme,
