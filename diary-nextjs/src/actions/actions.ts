@@ -5,7 +5,13 @@ import { journalBlock, journalEntry, usersTable } from "@/utils/schema";
 import { eq, asc, notInArray, and } from "drizzle-orm";
 
 export async function getEntries() {
-    const entries = await db;
+    const entries = db.query.journalEntry.findMany({
+        with: {
+            blocks: true,
+            orderBy: { position: "asc" },
+            limit: 1,
+        },
+    });
 
     return entries;
 }

@@ -2,7 +2,6 @@
 
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
 import DiaryEditor from "@/components/diary/utils/blocknote/DiaryEditor";
-import { DynamicEditor } from "@/components/diary/utils/blocknote/DynamicEditor";
 import { useEffect, useState } from "react";
 
 export default function Write() {

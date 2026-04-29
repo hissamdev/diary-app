@@ -7,7 +7,6 @@ import {
     pgTable,
     serial,
     text,
-    uuid,
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users_table", {
