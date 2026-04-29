@@ -7,9 +7,10 @@ import { eq, asc, notInArray, and } from "drizzle-orm";
 export async function getEntries() {
     const entries = db.query.journalEntry.findMany({
         with: {
-            blocks: true,
-            orderBy: { position: "asc" },
-            limit: 1,
+            blocks: {
+                orderBy: { position: "asc" },
+                limit: 1,
+            },
         },
     });
 
