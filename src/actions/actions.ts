@@ -5,8 +5,6 @@ import { journalBlock, journalEntry, usersTable } from "@/utils/schema";
 import { eq, asc, notInArray, and } from "drizzle-orm";
 
 export async function getEntries() {
-    await new Promise((r) => setTimeout(r, 5000));
-
     const entries = db.query.journalEntry.findMany({
         with: {
             blocks: {
