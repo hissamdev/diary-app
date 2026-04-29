@@ -12,6 +12,7 @@ import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
 import { getBlocks, propagateBlockUpdates } from "@/actions/actions";
 import { useRouter } from "next/navigation";
+import DiaryInitialization from "./DiaryInitialization";
 
 const retrievedData = [
     {
@@ -101,6 +102,20 @@ export default function DiaryEditor({
     const [data, setData] = useState<any[]>([]);
     const [id, setId] = useState<number>(0);
     const router = useRouter();
+
+    useEffect(() => {
+        const load = async () => {
+            console.log("Test");
+            const blocks = await getBlocks(
+                Number(localStorage.getItem("entryId")),
+            );
+            if (!blocks) return console.error("No blocks retrieved.");
+            console.log("Blocks received in front end: ", blocks);
+            setData(blocks);
+        };
+        load();
+    }, []);
+
     useEffect(() => {
         const id = Number(localStorage.getItem("entryId"));
         if (!id) {
@@ -128,45 +143,16 @@ export default function DiaryEditor({
         return () => clearTimeout(debounce);
     }, [data]);
 
-    const editor = useCreateBlockNote();
-    editor.onMount(async () => {
-        const blocks = await getBlocks(Number(localStorage.getItem("entryId")));
-        if (!blocks) return;
-        console.log("Blocks received in front end: ", blocks);
-        setData(blocks);
-
-        if (blocks.length > 0) {
-            console.log("Blocks exist: ", blocks);
-
-            const defaultBlockIds = editor.document.map((block) => block.id);
-            // @ts-ignore
-            editor.replaceBlocks(defaultBlockIds, blocks);
-            console.log("Replaced existing blocks with: ", blocks);
-        }
-    });
-
-    const darkTheme = {
-        colors: {
-            editor: {
-                text: "#FFFFFFAA",
-                background: "#1e1e1e",
-            },
-        },
-    };
+    if (data.length === 0 || !data) {
+        console.log("Not ready yet");
+        return <div></div>;
+    }
 
     return (
-        <>
-            <BlockNoteView
-                editor={editor}
-                onChange={() => {
-                    setData(editor.document);
-                }}
-                className="[&>.bn-editor]:min-h-120 w-full"
-                theme={{
-                    light: darkTheme,
-                    dark: darkTheme,
-                }}
-            />
-        </>
+        <DiaryInitialization
+            data={data}
+            setData={setData}
+            setSaving={setSaving}
+        />
     );
 }

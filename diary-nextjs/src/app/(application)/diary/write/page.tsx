@@ -1,6 +1,7 @@
 "use client";
 
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
+import DiaryEditor from "@/components/diary/utils/blocknote/DiaryEditor";
 import { DynamicEditor } from "@/components/diary/utils/blocknote/DynamicEditor";
 import { useEffect, useState } from "react";
 
@@ -30,7 +31,7 @@ export default function Write() {
                     </div>
                 </div>
                 <div className="mx-auto mt-16 max-w-7xl w-full ">
-                    <DynamicEditor setSaving={setSaving} />
+                    <DiaryEditor setSaving={setSaving} />
                 </div>
             </div>
         </section>

@@ -5,10 +5,7 @@ import { journalBlock, journalEntry, usersTable } from "@/utils/schema";
 import { eq, asc, notInArray, and } from "drizzle-orm";
 
 export async function getEntries() {
-    const entries = await db
-        .select()
-        .from(journalEntry)
-        .orderBy(asc(journalEntry.id));
+    const entries = await db;
 
     return entries;
 }
