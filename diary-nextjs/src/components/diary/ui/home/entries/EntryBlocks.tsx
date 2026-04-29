@@ -1,6 +1,5 @@
 import { getEntries } from "@/actions/actions";
 import { EditEntry } from "./EntryEdit";
-import { Suspense } from "react";
 
 export default async function EntryBlocks() {
     const entries = await getEntries();

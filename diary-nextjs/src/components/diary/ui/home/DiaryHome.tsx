@@ -1,6 +1,6 @@
 import DiarySidebar from "./DiarySidebar";
 import DiarySidebarRight from "./DiarySidebarRight";
-import Entries from "./Entries";
+import Entries from "./entries/Entries";
 
 export default function DiaryHome() {
     return (

@@ -1,12 +1,13 @@
 import { ArrowRight, Edit } from "lucide-react";
-import DiaryHeader from "../../diary-header/DiaryHeader";
+import DiaryHeader from "../../../diary-header/DiaryHeader";
 import { getEntries } from "@/actions/actions";
-import { useEntryContext } from "../../utils/context/entry/EntryContext";
+import { useEntryContext } from "../../../utils/context/entry/EntryContext";
 import { EditEntry } from "./EntryEdit";
 import EntryBlocks from "./EntryBlocks";
-import { Suspense } from "react";
 
 export default async function Entries() {
+    const entries = await getEntries();
+
     return (
         <div className="w-full">
             <DiaryHeader />
@@ -31,15 +32,7 @@ export default async function Entries() {
                     </span>
                 </div>
 
-                <Suspense
-                    fallback={
-                        <div className="mt-7 py-27 text-black font-medium text-2xl text-center bg-gray-300 rounded-4xl">
-                            Loading Entries...
-                        </div>
-                    }
-                >
-                    <EntryBlocks />
-                </Suspense>
+                <EntryBlocks />
             </div>
         </div>
     );

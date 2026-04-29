@@ -1,7 +1,7 @@
 "use client";
 
 import { Edit } from "lucide-react";
-import { useEntryContext } from "../../utils/context/entry/EntryContext";
+import { useEntryContext } from "../../../utils/context/entry/EntryContext";
 import Link from "next/link";
 
 export function EditEntry({ entryId }: { entryId: number }) {
