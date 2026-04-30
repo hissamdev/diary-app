@@ -17,28 +17,7 @@ export async function getEntries() {
     return entries;
 }
 
-export async function getBlocks(id: number) {
-    if (!id) return console.log("Id is zero");
-
-    const blocks = await db
-        .select()
-        .from(journalBlock)
-        .where(eq(journalBlock.entryId, id))
-        .orderBy(asc(journalBlock.position));
-
-    if (blocks.length === 0) {
-        console.log("No matching blocks were found, entry id: ", id);
-        return [{ type: "paragraph", content: "" }];
-    }
-
-    console.log(
-        "Matching blocks were found, entry id: ",
-        id,
-        "blocks: ",
-        blocks,
-    );
-    return blocks;
-}
+export async function getBlocks(id: number) {}
 
 export async function propagateBlockUpdates(doc: any[], entryId: number) {
     const withPosition = doc.map((block, index) => ({
@@ -105,8 +84,4 @@ export async function propagateBlockUpdates(doc: any[], entryId: number) {
             error: e,
         };
     }
-}
-
-export async function createEntry() {
-    await db.insert(journalEntry).values({});
 }

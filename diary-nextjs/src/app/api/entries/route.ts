@@ -1,0 +1,42 @@
+import { db } from "@/utils/db";
+import { journalBlock } from "@/utils/schema";
+import { asc, eq } from "drizzle-orm";
+
+export async function GET(request: Request) {
+    const body = await request.json();
+
+    try {
+        await db.query.journalEntry.findMany({
+            with: {
+                blocks: {
+                    limit: 3,
+                    orderBy: { position: "asc" },
+                },
+            },
+        });
+        console.log("All entries fetched successfully");
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (!id) return console.log("Id is zero or doesn't exist");
+
+    const blocks = await db
+        .select()
+        .from(journalBlock)
+        .where(eq(journalBlock.entryId, id))
+        .orderBy(asc(journalBlock.position));
+
+    if (blocks.length === 0) {
+        console.log("No matching blocks were found, entry id: ", id);
+        return [{ type: "paragraph", content: "" }];
+    }
+
+    console.log(
+        "Matching blocks were found, entry id: ",
+        id,
+        "blocks: ",
+        blocks,
+    );
+    return blocks;
+}

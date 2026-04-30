@@ -2,7 +2,8 @@ import { getEntries } from "@/actions/actions";
 import { EditEntry } from "./EntryEdit";
 
 export default async function EntryBlocks() {
-    const entries = await getEntries();
+    const res = await fetch("/api/entries");
+    const entries = (await res.json()) as any[];
 
     return (
         <div className="grid grid-cols-1 gap-y-5">
