@@ -1,3 +1,6 @@
+import { journalBlock } from "@/utils/schema";
+import { asc, eq } from "drizzle-orm";
+
 export async function PUT(request: Request) {
     if (!id) return console.log("Id is zero or doesn't exist");
 

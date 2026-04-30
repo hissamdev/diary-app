@@ -1,12 +1,8 @@
 import { db } from "@/utils/db";
-import { journalBlock } from "@/utils/schema";
-import { asc, eq } from "drizzle-orm";
 
 export async function GET(request: Request) {
-    const body = await request.json();
-
     try {
-        await db.query.journalEntry.findMany({
+        const res = await db.query.journalEntry.findMany({
             with: {
                 blocks: {
                     limit: 3,
@@ -14,29 +10,17 @@ export async function GET(request: Request) {
                 },
             },
         });
-        console.log("All entries fetched successfully");
+
+        return Response.json({
+            success: true,
+            message: "All entries fetched successfully",
+            data: res,
+        });
     } catch (e) {
-        console.error(e);
+        console.error("Failed to fetch entries: ", e);
+        return Response.json({
+            success: false,
+            message: "Failed to fetch all entries",
+        });
     }
-
-    if (!id) return console.log("Id is zero or doesn't exist");
-
-    const blocks = await db
-        .select()
-        .from(journalBlock)
-        .where(eq(journalBlock.entryId, id))
-        .orderBy(asc(journalBlock.position));
-
-    if (blocks.length === 0) {
-        console.log("No matching blocks were found, entry id: ", id);
-        return [{ type: "paragraph", content: "" }];
-    }
-
-    console.log(
-        "Matching blocks were found, entry id: ",
-        id,
-        "blocks: ",
-        blocks,
-    );
-    return blocks;
 }

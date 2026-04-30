@@ -32,7 +32,13 @@ export default function DiaryEditor({
             }
             setId(localId);
 
-            const blocks = await getBlocks(localId);
+            const res = await fetch("/api/blocks", {
+                method: "POST",
+                body: JSON.stringify({ id: localId }),
+            });
+            const { data } = (await res.json()) as { data: any[] };
+            const blocks = data;
+            console.log("Type ", data);
             // @ts-ignore
             setData(blocks);
         };
