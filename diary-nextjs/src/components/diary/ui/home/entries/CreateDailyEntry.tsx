@@ -4,7 +4,9 @@ import { ArrowRight } from "lucide-react";
 
 export default function CreateDailyEntry() {
     const handleCreate = async () => {
-        const res = await fetch("/api/entries/create");
+        const res = await fetch("/api/entries/create", {
+            method: "POST",
+        });
 
         if (res.status) {
             console.log("Entry created successfully");
