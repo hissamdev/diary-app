@@ -28,7 +28,7 @@ export async function getBlocks(id: number) {
 
     if (blocks.length === 0) {
         console.log("No matching blocks were found, entry id: ", id);
-        return [];
+        return [{ type: "paragraph", content: "" }];
     }
 
     console.log(

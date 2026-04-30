@@ -7,21 +7,51 @@ import "@blocknote/mantine/style.css";
 // Include the included Inter font
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getBlocks, propagateBlockUpdates } from "@/actions/actions";
 import { useRouter } from "next/navigation";
 
 type Props = {
+    entryId: number;
     data: any[];
-    setData: React.Dispatch<React.SetStateAction<any[]>>;
+    setData: React.Dispatch<React.SetStateAction<any[] | null>>;
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function DiaryInitialization({
+    entryId,
     data,
     setData,
     setSaving,
 }: Props) {
+    const timer = useRef<NodeJS.Timeout | null>(null);
+    const router = useRouter();
+
+    const handleSave = async () => {
+        if (timer.current) clearTimeout(timer.current);
+        setData(editor.document);
+
+        const currentData = editor.document;
+
+        if (currentData.length === 0 || currentData?.[0]?.id === null) return;
+
+        if (!entryId) {
+            router.push("/diary");
+            return;
+        }
+
+        setSaving(true);
+        timer.current = setTimeout(async () => {
+            const res = await propagateBlockUpdates(currentData, entryId);
+            if (res.success) {
+                console.log("Saved successfully");
+            } else {
+                console.error("Document failed to save");
+            }
+            setSaving(false);
+        }, 1000);
+    };
+
     const editor = useCreateBlockNote({
         initialContent: data,
     });
@@ -39,9 +69,7 @@ export default function DiaryInitialization({
         <>
             <BlockNoteView
                 editor={editor}
-                onChange={() => {
-                    setData(editor.document);
-                }}
+                onChange={handleSave}
                 className="[&>.bn-editor]:min-h-120 w-full"
                 theme={{
                     light: darkTheme,

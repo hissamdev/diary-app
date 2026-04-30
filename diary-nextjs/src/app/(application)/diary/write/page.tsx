@@ -1,8 +1,8 @@
 "use client";
 
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
-import DiaryEditor from "@/components/diary/utils/blocknote/DiaryEditor";
-import { useEffect, useState } from "react";
+import DiaryEditor from "@/components/diary/ui/edit/DiaryEditor";
+import { Suspense, useEffect, useState } from "react";
 
 export default function Write() {
     const [saving, setSaving] = useState<boolean>(false);
@@ -29,9 +29,11 @@ export default function Write() {
                         )}
                     </div>
                 </div>
-                <div className="mx-auto mt-16 max-w-7xl w-full ">
-                    <DiaryEditor setSaving={setSaving} />
-                </div>
+                <Suspense>
+                    <div className="mx-auto mt-16 max-w-7xl w-full ">
+                        <DiaryEditor setSaving={setSaving} />
+                    </div>
+                </Suspense>
             </div>
         </section>
     );
