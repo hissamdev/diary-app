@@ -1,12 +1,16 @@
 import { betterAuth, socialProviderList, socialProviders } from "better-auth";
 import { emailOTP } from "better-auth/plugins";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { db } from "./db";
+import * as schema from "./schema";
 
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL,
     database: drizzleAdapter(db, {
         provider: "pg",
+        schema: {
+            ...schema,
+        },
     }),
     socialProviders: {
         google: {
@@ -27,4 +31,5 @@ export const auth = betterAuth({
             },
         }),
     ],
+    experimental: { joins: true },
 });

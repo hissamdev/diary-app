@@ -5,10 +5,10 @@ import { Suspense } from "react";
 import CreateDailyEntry from "./CreateDailyEntry";
 import { isAuthenticated } from "@/actions/server";
 import { redirect } from "next/navigation";
+import SignIn from "./auth/SignIn";
 
 export default async function Entries() {
     const session = await isAuthenticated();
-    if (session) return redirect("/");
 
     return (
         <div className="w-full">
@@ -31,7 +31,7 @@ export default async function Entries() {
                         <EntryBlocks />
                     </Suspense>
                 ) : (
-                    <div>Not authenticated</div>
+                    <SignIn />
                 )}
             </div>
         </div>

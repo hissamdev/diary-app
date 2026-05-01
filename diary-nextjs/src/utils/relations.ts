@@ -1,9 +1,15 @@
 import { defineRelations } from "drizzle-orm";
-import { journalBlock, journalEntry } from "./schema";
-import * as schema from "./schema";
+import {
+    user,
+    session,
+    account,
+    verification,
+    journalBlock,
+    journalEntry,
+} from "./schema";
 
 export const relations = defineRelations(
-    { journalEntry, journalBlock },
+    { user, session, account, verification, journalEntry, journalBlock },
     (r) => ({
         journalBlock: {
             entry: r.one.journalEntry({
@@ -12,7 +18,34 @@ export const relations = defineRelations(
             }),
         },
         journalEntry: {
+            user: r.one.user({
+                from: r.journalEntry.userId,
+                to: r.user.id,
+            }),
             blocks: r.many.journalBlock(),
+        },
+        user: {
+            entries: r.many.journalEntry(),
+            sessions: r.many.session({
+                from: r.user.id,
+                to: r.session.userId,
+            }),
+            accounts: r.many.account({
+                from: r.user.id,
+                to: r.account.userId,
+            }),
+        },
+        session: {
+            user: r.one.user({
+                from: r.session.userId,
+                to: r.user.id,
+            }),
+        },
+        account: {
+            user: r.one.user({
+                from: r.account.userId,
+                to: r.user.id,
+            }),
         },
     }),
 );

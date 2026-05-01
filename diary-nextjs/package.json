@@ -13,6 +13,7 @@
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
 	},
 	"dependencies": {
+		"@better-auth/drizzle-adapter": "https://pkg.pr.new/better-auth/better-auth/@better-auth/drizzle-adapter@6913",
 		"@blocknote/core": "^0.48.1",
 		"@blocknote/mantine": "^0.48.1",
 		"@blocknote/react": "^0.48.1",
