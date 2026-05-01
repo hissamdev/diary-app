@@ -12,7 +12,6 @@ export async function isAuthenticated() {
         headers: await headers(),
     });
 
-    console.log("Returning session: ", session);
     return session;
 }
 

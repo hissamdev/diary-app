@@ -5,8 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     const body = await request.json();
     const { userId } = body as { userId: string };
-    if (!userId || userId !== typeof "string") {
-        return NextResponse.json({ success: false, message: "Invalid userId" });
+    if (!userId || typeof userId !== "string") {
+        return NextResponse.json({
+            success: false,
+            message: "Invalid userId",
+        });
     }
     try {
         await db.insert(journalEntry).values({

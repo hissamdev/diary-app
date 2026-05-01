@@ -26,7 +26,7 @@ export default function CreateDailyEntry() {
 
     return (
         <button
-            disabled={!session}
+            disabled={!session?.user.id}
             onClick={handleCreate}
             className="mt-5 w-full flex cursor-pointer items-center justify-between rounded-xl disabled:cursor-not-allowed text-left disabled:bg-indigo-600 bg-indigo-600 hover:bg-indigo-600/95 transition-all p-6 group"
         >

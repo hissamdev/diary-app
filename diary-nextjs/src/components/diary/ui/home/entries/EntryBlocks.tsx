@@ -1,10 +1,14 @@
-import { getEntries } from "@/actions/server";
+import { ApiResponse } from "@/types/apis";
 import { EditEntry } from "./EntryEdit";
 
 export default async function EntryBlocks() {
     const res = await fetch("http://localhost:3000/api/entries");
-    const { data } = (await res.json()) as { data: any[] };
-    const entries = data;
+    const json = (await res.json()) as ApiResponse;
+    if (!json.success) {
+        console.error(json.message);
+        return;
+    }
+    const entries = json.data;
 
     return (
         <div className="grid grid-cols-1 gap-y-5">
@@ -25,7 +29,7 @@ export default async function EntryBlocks() {
                         </div>
                         <div className="mt-4 rounded-lg border border-indigo-600/40 px-6 py-7">
                             <h2 className="text-lg font-bold text-black">
-                                {(entry.blocks?.[0]?.content as any)?.[0].text}{" "}
+                                {(entry.blocks?.[0]?.content as any)?.[0]?.text}{" "}
                                 Id: {entry.id}
                             </h2>
                             <p className="mt-3 text-black">

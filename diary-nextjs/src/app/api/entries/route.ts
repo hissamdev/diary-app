@@ -1,6 +1,21 @@
+import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Not authorized",
+            headers: session,
+        });
+    }
+    const matchId = session?.user.id;
+
     try {
         const res = await db.query.journalEntry.findMany({
             with: {
@@ -21,6 +36,7 @@ export async function GET(request: Request) {
         return Response.json({
             success: false,
             message: "Failed to fetch all entries",
+            error: e,
         });
     }
 }

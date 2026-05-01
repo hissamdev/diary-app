@@ -53,6 +53,8 @@ export default function DiaryInitialization({
         }, 1000);
     };
 
+    console.log("Data before init: ", data);
+
     const editor = useCreateBlockNote({
         initialContent: data,
     });

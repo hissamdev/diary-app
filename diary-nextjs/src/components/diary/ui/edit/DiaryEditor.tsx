@@ -36,6 +36,9 @@ export default function DiaryEditor() {
         console.log("Not ready yet");
         return <div></div>;
     }
+    if (data) {
+        console.log("data is: ", data);
+    }
 
     return (
         <div>

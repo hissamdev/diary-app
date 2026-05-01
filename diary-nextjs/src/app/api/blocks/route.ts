@@ -4,7 +4,7 @@ export async function POST(request: Request) {
     const { id } = (await request.json()) as { id: number };
     const parsedId = Number(id);
 
-    if (!parsedId)
+    if (!parsedId || typeof parsedId !== "number")
         return Response.json({
             success: false,
             message: "Invalid entryId or 0",
@@ -19,7 +19,8 @@ export async function POST(request: Request) {
             return Response.json({
                 success: true,
                 message: "No blocks found, returning default",
-                data: JSON.stringify({ type: "paragraph", content: "" }),
+                id: typeof parsedId,
+                data: JSON.stringify([{ type: "paragraph", content: "" }]),
             });
         }
 

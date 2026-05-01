@@ -6,13 +6,13 @@ import { redirect } from "next/navigation";
 
 export default async function Write() {
     const session = await isAuthenticated();
-    if (session) return redirect("/");
+    if (!session) return redirect("/diary");
 
     return (
         <section className="bg-[#1e1e1e] min-h-screen flex">
             <EditSidebar />
             <div className="w-full">
-                {!session ? (
+                {session ? (
                     <Suspense>
                         <DiaryEditor />
                     </Suspense>
