@@ -3,15 +3,11 @@ import { EditEntry } from "./EntryEdit";
 import { getAllEntries } from "@/actions/server";
 
 export default async function EntryBlocks() {
-    // const res = await fetch("http://localhost:3000/api/entries");
-    // const json = (await res.json()) as ApiResponse;
-    // if (!json.success) {
-    //     console.error(json.message);
-    //     return;
-    // }
-    // const entries = json.data;
-    const res = await getAllEntries();
+    const res = await fetch("http://localhost:3000/api/entries");
     const json: ApiResponse = await res.json();
+    if (!json.success) {
+        console.error(json.message, json.error);
+    }
     const entries = json.data;
 
     return (

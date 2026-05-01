@@ -12,7 +12,7 @@ export async function isAuthenticated() {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
-
+    console.log("Session is: ", session);
     return session;
 }
 
@@ -54,13 +54,25 @@ export async function getAllEntries() {
 
 export async function propagateBlockUpdates(doc: any[], entryId: number) {
     const session = await isAuthenticated();
-    if (!session) {
-        return NextResponse.json({
+
+    const isUserOwner = db.query.journalEntry.findFirst({
+        where: { id: entryId, userId: session?.user.id },
+    });
+
+    if (!session || !isUserOwner) {
+        return {
             success: false,
             message: "Unauthorized",
             status: 401,
-        });
+        };
     }
+
+    // Sanitize
+    if (!Array.isArray(doc))
+        return {
+            success: false,
+            message: "Invalid document",
+        };
 
     const withPosition = doc.map((block, index) => ({
         ...block,
@@ -107,12 +119,6 @@ export async function propagateBlockUpdates(doc: any[], entryId: number) {
                     ),
                 );
         });
-        console.log(
-            "Saved blocks: ",
-            withPosition,
-            "Server action successful with entryId: ",
-            entryId,
-        );
         revalidateTag("entries", "max");
         revalidatePath("/diary");
         return {

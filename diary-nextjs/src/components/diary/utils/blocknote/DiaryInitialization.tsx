@@ -42,7 +42,8 @@ export default function DiaryInitialization({
 
         setSaving(true);
         timer.current = setTimeout(async () => {
-            const res = await propagateBlockUpdates(currentData, entryId);
+            const res: { message: string; success: boolean } =
+                await propagateBlockUpdates(currentData, entryId);
 
             if (res.success) {
                 console.log("Saved successfully");
