@@ -1,4 +1,4 @@
-import { getEntries } from "@/actions/actions";
+import { getEntries } from "@/actions/server";
 import { EditEntry } from "./EntryEdit";
 
 export default async function EntryBlocks() {

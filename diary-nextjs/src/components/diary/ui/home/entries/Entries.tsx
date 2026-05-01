@@ -3,8 +3,13 @@ import DiaryHeader from "../../../diary-header/DiaryHeader";
 import EntryBlocks from "./EntryBlocks";
 import { Suspense } from "react";
 import CreateDailyEntry from "./CreateDailyEntry";
+import { isAuthenticated } from "@/actions/server";
+import { redirect } from "next/navigation";
 
 export default async function Entries() {
+    const session = await isAuthenticated();
+    if (session) return redirect("/");
+
     return (
         <div className="w-full">
             <DiaryHeader />
@@ -21,9 +26,13 @@ export default async function Entries() {
                     </span>
                 </div>
 
-                <Suspense>
-                    <EntryBlocks />
-                </Suspense>
+                {!session ? (
+                    <Suspense>
+                        <EntryBlocks />
+                    </Suspense>
+                ) : (
+                    <div>Not authenticated</div>
+                )}
             </div>
         </div>
     );

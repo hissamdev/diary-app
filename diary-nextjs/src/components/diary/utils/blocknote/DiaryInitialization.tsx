@@ -8,7 +8,7 @@ import "@blocknote/mantine/style.css";
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useRef, useState } from "react";
-import { propagateBlockUpdates } from "@/actions/actions";
+import { propagateBlockUpdates } from "@/actions/server";
 import { useRouter } from "next/navigation";
 
 type Props = {

@@ -1,8 +1,20 @@
 "use server";
 
+import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { journalBlock } from "@/utils/schema";
 import { eq, notInArray, and } from "drizzle-orm";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { headers } from "next/headers";
+
+export async function isAuthenticated() {
+    const session = auth.api.getSession({
+        headers: await headers(),
+    });
+
+    console.log("Returning session: ", session);
+    return session;
+}
 
 export async function propagateBlockUpdates(doc: any[], entryId: number) {
     const withPosition = doc.map((block, index) => ({
@@ -56,6 +68,8 @@ export async function propagateBlockUpdates(doc: any[], entryId: number) {
             "Server action successful with entryId: ",
             entryId,
         );
+        revalidateTag("entries", "max");
+        revalidatePath("/diary");
         return {
             message: "Changes have been propogated to remote database",
             success: true,
