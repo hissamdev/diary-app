@@ -1,23 +1,22 @@
+import { isAuthenticated } from "@/actions/server";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
+    const session = await isAuthenticated();
     if (!session) {
         return NextResponse.json({
             success: false,
-            message: "Not authorized",
-            headers: session,
+            message: "Unauthorized",
+            status: 401,
         });
     }
-    const matchId = session?.user.id;
 
     try {
         const res = await db.query.journalEntry.findMany({
+            where: { userId: session.user.id },
             with: {
                 blocks: {
                     limit: 3,
@@ -35,7 +34,7 @@ export async function GET(request: Request) {
         console.error("Failed to fetch entries: ", e);
         return Response.json({
             success: false,
-            message: "Failed to fetch all entries",
+            message: "Failed to fetch entries",
             error: e,
         });
     }

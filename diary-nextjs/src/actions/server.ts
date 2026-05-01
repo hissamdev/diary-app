@@ -6,6 +6,7 @@ import { journalBlock } from "@/utils/schema";
 import { eq, notInArray, and } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function isAuthenticated() {
     const session = await auth.api.getSession({
@@ -15,7 +16,52 @@ export async function isAuthenticated() {
     return session;
 }
 
+export async function getAllEntries() {
+    const session = await isAuthenticated();
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            status: 401,
+        });
+    }
+
+    try {
+        const res = await db.query.journalEntry.findMany({
+            where: { userId: session.user.id },
+            with: {
+                blocks: {
+                    limit: 3,
+                    orderBy: { position: "asc" },
+                },
+            },
+        });
+
+        return Response.json({
+            success: true,
+            message: "All entries fetched successfully",
+            data: res,
+        });
+    } catch (e) {
+        console.error("Failed to fetch entries: ", e);
+        return Response.json({
+            success: false,
+            message: "Failed to fetch entries",
+            error: e,
+        });
+    }
+}
+
 export async function propagateBlockUpdates(doc: any[], entryId: number) {
+    const session = await isAuthenticated();
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            status: 401,
+        });
+    }
+
     const withPosition = doc.map((block, index) => ({
         ...block,
         entryId,
