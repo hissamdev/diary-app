@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "aece8d42-a762-4a86-9ca2-177bd309cc4f",
+  "id": "ca42c2ef-6d0a-4dae-ad85-5f90c91cd1c1",
   "prevIds": [
-    "da30f3f0-3854-4103-8c8a-29d64bfb5861"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -314,6 +314,19 @@
       "entityType": "columns",
       "schema": "public",
       "table": "journal_blocks"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "journal_entries"
     },
     {
       "type": "serial",

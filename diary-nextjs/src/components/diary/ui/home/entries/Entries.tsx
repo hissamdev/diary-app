@@ -26,7 +26,7 @@ export default async function Entries() {
                     </span>
                 </div>
 
-                {!session ? (
+                {session ? (
                     <Suspense>
                         <EntryBlocks />
                     </Suspense>

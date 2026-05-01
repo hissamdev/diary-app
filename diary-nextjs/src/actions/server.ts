@@ -8,7 +8,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 
 export async function isAuthenticated() {
-    const session = auth.api.getSession({
+    const session = await auth.api.getSession({
         headers: await headers(),
     });
 

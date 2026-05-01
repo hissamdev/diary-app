@@ -105,6 +105,7 @@ export const verification = pgTable("verification", {
 // Journal Tables
 
 export const journalEntry = pgTable("journal_entries", {
+    userId: text("user_id").notNull(),
     id: serial("id").primaryKey(),
     createdAt: date("created_at").defaultNow().notNull(),
     lastUpdated: date("last_updated").defaultNow().notNull(),
@@ -126,7 +127,7 @@ export const journalBlock = pgTable("journal_blocks", {
 });
 
 export const relations = defineRelations(
-    { journalEntry, journalBlock },
+    { user, journalEntry, journalBlock },
     (r) => ({
         journalBlock: {
             entry: r.one.journalEntry({
@@ -135,7 +136,14 @@ export const relations = defineRelations(
             }),
         },
         journalEntry: {
+            user: r.one.user({
+                from: r.journalEntry.userId,
+                to: r.user.id,
+            }),
             blocks: r.many.journalBlock(),
+        },
+        user: {
+            entries: r.many.journalEntry(),
         },
     }),
 );

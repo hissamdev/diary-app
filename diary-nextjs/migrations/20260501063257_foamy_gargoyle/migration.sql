@@ -14,6 +14,25 @@ CREATE TABLE "account" (
 	"updated_at" timestamp(6) with time zone NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "journal_blocks" (
+	"primary_key" serial PRIMARY KEY,
+	"entry_id" integer NOT NULL,
+	"position" integer NOT NULL,
+	"id" text NOT NULL UNIQUE,
+	"type" text NOT NULL,
+	"props" json,
+	"content" json,
+	"children" json
+);
+--> statement-breakpoint
+CREATE TABLE "journal_entries" (
+	"user_id" text NOT NULL,
+	"id" serial PRIMARY KEY,
+	"created_at" date DEFAULT now() NOT NULL,
+	"last_updated" date DEFAULT now() NOT NULL,
+	"is_property_modified" boolean DEFAULT false NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "session" (
 	"id" text PRIMARY KEY,
 	"user_id" text NOT NULL,
@@ -44,6 +63,5 @@ CREATE TABLE "verification" (
 	"updated_at" timestamp(6) with time zone NOT NULL
 );
 --> statement-breakpoint
-DROP TABLE "users_table";--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE;
