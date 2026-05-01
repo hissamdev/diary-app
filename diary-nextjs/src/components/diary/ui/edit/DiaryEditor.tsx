@@ -1,25 +1,12 @@
 "use client";
 
-import { useCreateBlockNote } from "@blocknote/react";
-// Or, you can use ariakit, shadcn, etc.
-import { BlockNoteView } from "@blocknote/mantine";
-// Default styles for the mantine editor
-//@ts-ignore
-import "@blocknote/mantine/style.css";
-// Include the included Inter font
-//@ts-ignore
-import "@blocknote/core/fonts/inter.css";
 import { useEffect, useState } from "react";
-import { getBlocks, propagateBlockUpdates } from "@/actions/actions";
 import { useRouter } from "next/navigation";
 import DiaryInitialization from "../../utils/blocknote/DiaryInitialization";
 
-export default function DiaryEditor({
-    setSaving,
-}: {
-    setSaving: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function DiaryEditor() {
     const [id, setId] = useState<number>(0);
+    const [saving, setSaving] = useState<boolean>(false);
     const [data, setData] = useState<any[] | null>(null);
     const router = useRouter();
 
@@ -51,11 +38,27 @@ export default function DiaryEditor({
     }
 
     return (
-        <DiaryInitialization
-            entryId={id}
-            data={data}
-            setData={setData}
-            setSaving={setSaving}
-        />
+        <div>
+            <div className="max-w-7xl px-14 w-full mx-auto py-4 flex justify-between items-center text-sm font-inter">
+                <div>
+                    <p>Entry Id: {id}</p>
+                </div>
+                <div className="w-12">
+                    {saving ? (
+                        <p className="text-gray-400">Saving...</p>
+                    ) : (
+                        <p className="text-gray-400 font-inter">Saved</p>
+                    )}
+                </div>
+            </div>
+            <div className="mx-auto mt-16 max-w-7xl w-full ">
+                <DiaryInitialization
+                    entryId={id}
+                    data={data}
+                    setData={setData}
+                    setSaving={setSaving}
+                />
+            </div>
+        </div>
     );
 }

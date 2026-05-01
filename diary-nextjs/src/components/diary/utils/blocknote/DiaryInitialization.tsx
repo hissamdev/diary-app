@@ -8,7 +8,7 @@ import "@blocknote/mantine/style.css";
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useRef, useState } from "react";
-import { getBlocks, propagateBlockUpdates } from "@/actions/actions";
+import { propagateBlockUpdates } from "@/actions/actions";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -43,6 +43,7 @@ export default function DiaryInitialization({
         setSaving(true);
         timer.current = setTimeout(async () => {
             const res = await propagateBlockUpdates(currentData, entryId);
+
             if (res.success) {
                 console.log("Saved successfully");
             } else {

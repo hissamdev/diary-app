@@ -1,23 +1,8 @@
 "use server";
 
 import { db } from "@/utils/db";
-import { journalBlock, journalEntry, usersTable } from "@/utils/schema";
-import { eq, asc, notInArray, and } from "drizzle-orm";
-
-export async function getEntries() {
-    const entries = db.query.journalEntry.findMany({
-        with: {
-            blocks: {
-                orderBy: { position: "asc" },
-                limit: 1,
-            },
-        },
-    });
-
-    return entries;
-}
-
-export async function getBlocks(id: number) {}
+import { journalBlock } from "@/utils/schema";
+import { eq, notInArray, and } from "drizzle-orm";
 
 export async function propagateBlockUpdates(doc: any[], entryId: number) {
     const withPosition = doc.map((block, index) => ({
