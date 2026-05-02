@@ -23,7 +23,6 @@ export default async function Entries() {
                         the small magic of today.
                     </p>
                 </div>
-                <CreateDailyEntry />
                 <div className="mt-8 flex justify-between">
                     <h2 className="font-manrope font-semibold text-3xl text-black">
                         Recent Activity

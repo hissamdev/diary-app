@@ -1,6 +1,7 @@
 import { ApiResponse } from "@/types/apis";
 import { EditEntry } from "./EntryEdit";
 import { headers } from "next/headers";
+import { DotSquare, Ellipsis } from "lucide-react";
 
 type EntryRes = {
     success: boolean;
@@ -37,12 +38,17 @@ export default async function EntryBlocks() {
     const entries = entriesWithDate;
 
     return (
-        <div className="grid grid-cols-1 gap-y-5">
+        <div className="mt-5 grid grid-cols-1 gap-y-3">
             {entries.map((entry) => {
                 const dateFormatted = entry.createdAt.toLocaleDateString(
                     "en-US",
                     {
                         day: "2-digit",
+                    },
+                );
+                const dayFormatted = entry.createdAt.toLocaleDateString(
+                    "en-US",
+                    {
                         weekday: "short",
                         month: "short",
                         year: "numeric",
@@ -57,30 +63,46 @@ export default async function EntryBlocks() {
                 );
 
                 return (
-                    <div key={entry.id} className="entry mt-3">
-                        <div className="flex items-center justify-between gap-6">
-                            <div className="flex items-center gap-3">
-                                <h4 className="text-lg font-bold text-black">
-                                    Date: {dateFormatted} Time: {timeFormatted}
-                                </h4>
-                                <span className="rounded bg-indigo-600 px-1.5 py-0.5 text-xs text-white uppercase">
+                    <div key={entry.id} className="entry mt-3 flex">
+                        <div className="flex gap-6">
+                            <div className="flex flex-col items-center">
+                                <h3 className="pt-3 text-3xl font-bold text-black">
+                                    {dateFormatted}
+                                </h3>
+                                {/* <span className="rounded bg-indigo-600 px-1.5 py-0.5 text-xs text-white uppercase">
                                     Just Now
-                                </span>
+                                </span> */}
+                                <h4 className=" tracking-widest font-semibold font-manrope text-[#6366F1]">
+                                    FRI
+                                </h4>
                             </div>
-                            <span className="aspect-square w-2 rounded-full bg-gray-300"></span>
-                            <EditEntry entryId={entry.id} />
                         </div>
-                        <div className="mt-4 rounded-lg border border-indigo-600/40 px-6 py-7">
-                            <h2 className="text-lg font-bold text-black">
-                                {(entry.blocks?.[0]?.content as any)?.[0]?.text}{" "}
-                                Id: {entry.id}
-                            </h2>
-                            <p className="mt-3 text-black">
-                                {
-                                    (entry.blocks?.[1]?.content as any[])?.[0]
-                                        ?.text
-                                }
-                            </p>
+                        <div className="ml-16 w-full">
+                            <div className="w-full flex justify-between">
+                                <div className="flex items-center gap-6">
+                                    <span className="font-semibold font-inter text-[#6366F1]">
+                                        {timeFormatted}
+                                    </span>
+                                    <Ellipsis className="text-black" />
+                                </div>
+                                <EditEntry entryId={entry.id} />
+                            </div>
+                            <div>
+                                {entry.blocks.map((block) => {
+                                    return (
+                                        <p
+                                            key={block?.id}
+                                            className="text-black text-[17px] font-manrope"
+                                        >
+                                            {block?.content?.map(
+                                                (text: any) => {
+                                                    return text.text;
+                                                },
+                                            )}
+                                        </p>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 );

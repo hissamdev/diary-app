@@ -11,7 +11,7 @@ export function EditEntry({ entryId }: { entryId: number }) {
         <Link
             onClick={() => localStorage.setItem("entryId", entryId.toString())}
             href="/diary/write"
-            className="flex cursor-pointer items-center gap-1 rounded bg-indigo-100 px-2 py-0.5 text-[12px] font-bold tracking-wide text-indigo-600 uppercase transition-colors hover:bg-indigo-100/70"
+            className="flex cursor-pointer items-center gap-1 rounded bg-indigo-100 px-2 py-0.5 text-[12px] font-bold tracking-wide hover:bg-indigo-100/70"
         >
             <Edit className="w-3" />
             Edit
