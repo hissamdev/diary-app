@@ -2,13 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import DiaryInitialization from "../../utils/blocknote/DiaryInitialization";
 import { ApiResponse } from "@/types/apis";
 import { DynamicEditor } from "../../utils/blocknote/DynamicEditor";
 
-export default function DiaryEditor() {
-    const [id, setId] = useState<number>(0);
-    const [saving, setSaving] = useState<boolean>(false);
+type Props = {
+    entryId: number;
+    setEntryId: React.Dispatch<React.SetStateAction<number>>;
+    setSaving: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function DiaryEditorPreInit({
+    entryId,
+    setEntryId,
+    setSaving,
+}: Props) {
     const [data, setData] = useState<any[] | null>(null);
     const router = useRouter();
 
@@ -19,7 +26,7 @@ export default function DiaryEditor() {
                 router.push("/diary");
                 return;
             }
-            setId(localEntryId);
+            setEntryId(localEntryId);
 
             const res = await fetch("/api/blocks", {
                 method: "POST",
@@ -40,27 +47,14 @@ export default function DiaryEditor() {
     }, []);
 
     if (!Array.isArray(data) || !data || data?.length === 0) {
-        console.log("Not ready yet: ", data);
         return <div></div>;
     }
 
     return (
         <div>
-            <div className="max-w-7xl px-14 w-full mx-auto py-4 flex justify-between items-center text-sm font-inter">
-                <div>
-                    <p>Entry Id: {id}</p>
-                </div>
-                <div className="w-12">
-                    {saving ? (
-                        <p className="text-gray-400">Saving...</p>
-                    ) : (
-                        <p className="text-gray-400 font-inter">Saved</p>
-                    )}
-                </div>
-            </div>
             <div className="mx-auto mt-16 max-w-7xl w-full ">
                 <DynamicEditor
-                    entryId={id}
+                    entryId={entryId}
                     // @ts-ignore
                     data={data}
                     setData={setData}

@@ -1,8 +1,9 @@
 import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
-import DiaryEditor from "@/components/diary/ui/edit/DiaryEditor";
+import DiaryEditor from "@/components/diary/ui/edit/DiaryEditorPreInit";
 import { Suspense } from "react";
 import { isAuthenticated } from "@/actions/server";
 import { redirect } from "next/navigation";
+import DiaryEdit from "@/components/diary/ui/edit/DiaryEdit";
 
 export default async function Write() {
     const session = await isAuthenticated();
@@ -14,7 +15,7 @@ export default async function Write() {
             <div className="w-full">
                 {session ? (
                     <Suspense>
-                        <DiaryEditor />
+                        <DiaryEdit />
                     </Suspense>
                 ) : (
                     <div>Not authenticated</div>
