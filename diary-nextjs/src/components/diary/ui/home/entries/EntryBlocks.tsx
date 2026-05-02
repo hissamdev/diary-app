@@ -3,7 +3,7 @@ import { EditEntry } from "./EntryEdit";
 import { headers } from "next/headers";
 import { DotSquare, Ellipsis } from "lucide-react";
 
-type EntryRes = {
+export type EntryRes = {
     success: boolean;
     message: string;
     error: unknown;
@@ -11,13 +11,25 @@ type EntryRes = {
         {
             userId: string;
             id: number;
-            createdAt: Date;
-            lastUpdated: Date;
+            createdAt: string;
+            lastUpdated: string;
             // If properties are unmodified, we will set properties based on tags later inserted.
             isPropertyModified: boolean;
             blocks: any[];
         },
     ];
+};
+
+export type EntryData = {
+    data: {
+        userId: string;
+        id: number;
+        createdAt: string;
+        lastUpdated: string;
+        // If properties are unmodified, we will set properties based on tags later inserted.
+        isPropertyModified: boolean;
+        blocks: any[];
+    };
 };
 
 export default async function EntryBlocks() {
@@ -50,8 +62,6 @@ export default async function EntryBlocks() {
                     "en-US",
                     {
                         weekday: "short",
-                        month: "short",
-                        year: "numeric",
                     },
                 );
                 const timeFormatted = entry.createdAt.toLocaleTimeString(
@@ -73,7 +83,7 @@ export default async function EntryBlocks() {
                                     Just Now
                                 </span> */}
                                 <h4 className=" tracking-widest font-semibold font-manrope text-[#6366F1]">
-                                    FRI
+                                    {dayFormatted}
                                 </h4>
                             </div>
                         </div>
@@ -87,7 +97,7 @@ export default async function EntryBlocks() {
                                 </div>
                                 <EditEntry entryId={entry.id} />
                             </div>
-                            <div>
+                            <div className="mt-2">
                                 {entry.blocks.map((block) => {
                                     return (
                                         <p
