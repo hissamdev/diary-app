@@ -1,3 +1,5 @@
+"use client";
+
 import { useCreateBlockNote } from "@blocknote/react";
 // Or, you can use ariakit, shadcn, etc.
 import { BlockNoteView } from "@blocknote/mantine";
@@ -10,6 +12,7 @@ import "@blocknote/core/fonts/inter.css";
 import { useEffect, useRef, useState } from "react";
 import { propagateBlockUpdates } from "@/actions/server";
 import { useRouter } from "next/navigation";
+import { ApiResponse } from "@/types/apis";
 
 type Props = {
     entryId: number;
@@ -32,9 +35,7 @@ export default function DiaryInitialization({
         setData(editor.document);
 
         const currentData = editor.document;
-
         if (currentData.length === 0 || currentData?.[0]?.id === null) return;
-
         if (!entryId) {
             router.push("/diary");
             return;
@@ -42,19 +43,21 @@ export default function DiaryInitialization({
 
         setSaving(true);
         timer.current = setTimeout(async () => {
-            const res: { message: string; success: boolean } =
-                await propagateBlockUpdates(currentData, entryId);
+            const res = await fetch("/api/blocks/update");
+            const json: ApiResponse = await res.json();
 
-            if (res.success) {
-                console.log("Saved successfully");
-            } else {
+            if (!json.success) {
                 console.error("Document failed to save");
             }
             setSaving(false);
         }, 1000);
     };
 
-    console.log("Data rendered: ", data);
+    if (!data || data.length === 0) {
+        console.error("Invalid data: ", data);
+        return;
+    }
+
     const editor = useCreateBlockNote({
         initialContent: data,
     });

@@ -39,7 +39,7 @@ export async function POST(request: Request) {
                 success: true,
                 message: "No blocks found, returning default",
                 id: typeof parsedId,
-                data: JSON.stringify([{ type: "paragraph", content: "" }]),
+                data: [{ type: "paragraph", content: "" }],
             });
         }
 

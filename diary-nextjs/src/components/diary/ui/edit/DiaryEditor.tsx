@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DiaryInitialization from "../../utils/blocknote/DiaryInitialization";
 import { ApiResponse } from "@/types/apis";
+import { DynamicEditor } from "../../utils/blocknote/DynamicEditor";
 
 export default function DiaryEditor() {
     const [id, setId] = useState<number>(0);
     const [saving, setSaving] = useState<boolean>(false);
-    const [data, setData] = useState<any[] | null>([
-        { type: "paragraph", content: "" },
-    ]);
+    const [data, setData] = useState<any[] | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -27,26 +26,22 @@ export default function DiaryEditor() {
                 body: JSON.stringify({ entryId: localEntryId }),
             });
 
-            const { data, success, message }: ApiResponse = await res.json();
-            if (!success) {
-                console.error(message);
+            const json: ApiResponse = await res.json();
+            if (!json.success) {
+                console.error(json.message);
                 return;
             }
-            console.log(message, data);
-            const blocks = data;
+            console.log(json.message, json.data);
+            const blocks = json.data;
             // @ts-ignore
             setData(blocks);
         };
         load();
     }, []);
 
-    if (!data || data?.length === 0) {
-        console.log("Not ready yet, ", data);
+    if (!Array.isArray(data) || !data || data?.length === 0) {
+        console.log("Not ready yet: ", data);
         return <div></div>;
-    }
-
-    if (data.length > 0) {
-        console.log("Ready: ", data);
     }
 
     return (
@@ -64,7 +59,7 @@ export default function DiaryEditor() {
                 </div>
             </div>
             <div className="mx-auto mt-16 max-w-7xl w-full ">
-                <DiaryInitialization
+                <DynamicEditor
                     entryId={id}
                     // @ts-ignore
                     data={data}
