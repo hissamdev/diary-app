@@ -10,7 +10,6 @@ import "@blocknote/mantine/style.css";
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
 import { useEffect, useRef, useState } from "react";
-import { propagateBlockUpdates } from "@/actions/server";
 import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
 
@@ -43,12 +42,29 @@ export default function DiaryInitialization({
 
         setSaving(true);
         timer.current = setTimeout(async () => {
-            const res = await fetch("/api/blocks/update");
-            const json: ApiResponse = await res.json();
-
-            if (!json.success) {
-                console.error("Document failed to save");
+            try {
+                const res = await fetch("/api/blocks/update", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        doc: currentData,
+                        entryId,
+                    }),
+                });
+                if (!res.ok) {
+                    console.error("HTTP Error: ", res.status);
+                }
+                console.log(!!res);
+                const json: ApiResponse = await res.json();
+                if (!json.success) {
+                    console.error(json.message, json.error);
+                }
+            } catch (err) {
+                console.error(err);
             }
+
             setSaving(false);
         }, 1000);
     };

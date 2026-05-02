@@ -81,17 +81,17 @@ export async function PUT(request: Request) {
         });
         revalidateTag("entries", "max");
         revalidatePath("/diary");
-        return {
-            message: "Changes have been propogated to remote database",
+        return NextResponse.json({
             success: true,
-        };
+            message: "Changes have been propogated to remote database",
+        });
     } catch (e) {
         console.error(e);
-        return {
+        return NextResponse.json({
             message:
                 "Server action failed to propagate changes to remote database",
             success: false,
             error: e,
-        };
+        });
     }
 }
