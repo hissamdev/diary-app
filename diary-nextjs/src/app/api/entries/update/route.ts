@@ -1,26 +1,46 @@
 import { Blocks } from "@/types/drizzle";
+import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { journalBlock } from "@/utils/schema";
 import { and, eq, notInArray } from "drizzle-orm";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function PUT(request: Request) {
     const body = await request.json();
-    const { data, entryId } = body as { data: any[]; entryId: number };
+    const { doc, entryId } = body as { doc: any[]; entryId: number };
 
-    if (!Array.isArray(data) || data.length === 0 || !entryId) {
-        return Response.json({
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            status: 401,
+        });
+    }
+
+    const isUserOwner = db.query.journalEntry.findFirst({
+        where: { id: entryId, userId: session.user.id },
+    });
+
+    // Sanitize
+    if (!Array.isArray(doc) || doc.length === 0 || !entryId || !isUserOwner) {
+        return NextResponse.json({
             success: false,
             message: "Invalid request body",
         });
     }
 
-    const withPosition: Blocks = data.map((block, index) => ({
+    const withPosition = doc.map((block, index) => ({
         ...block,
-        entryId: entryId,
-        position: (index + 1) * 10, // Avoids 0, starts from 10
+        entryId,
+        position: (index + 1) * 10,
     }));
 
-    const blockIds: string[] = withPosition.map((block) => block.id);
+    const blockIds = withPosition.map((block) => block.id);
 
     try {
         await db.transaction(async (tx) => {
@@ -32,20 +52,23 @@ export async function PUT(request: Request) {
                         position: block.position,
                         id: block.id,
                         type: block.type,
+                        props: block.props,
                         content: block.content,
                         children: block.children,
-                        props: block.props,
                     })
                     .onConflictDoUpdate({
                         target: journalBlock.id,
                         set: {
                             position: block.position,
                             type: block.type,
+                            props: block.props,
                             content: block.content,
                             children: block.children,
-                            props: block.props,
                         },
                     });
+            }
+            if (!entryId) {
+                throw new Error("entryId is required");
             }
             await tx
                 .delete(journalBlock)
@@ -56,17 +79,19 @@ export async function PUT(request: Request) {
                     ),
                 );
         });
-
-        return Response.json({
+        revalidateTag("entries", "max");
+        revalidatePath("/diary");
+        return {
+            message: "Changes have been propogated to remote database",
             success: true,
-            message: "Changes saved to remote database",
-        });
+        };
     } catch (e) {
         console.error(e);
-        return Response.json({
+        return {
+            message:
+                "Server action failed to propagate changes to remote database",
             success: false,
-            message: "Failed to save changes to remote database",
             error: e,
-        });
+        };
     }
 }

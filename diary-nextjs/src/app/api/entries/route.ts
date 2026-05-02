@@ -1,4 +1,3 @@
-import { isAuthenticated } from "@/actions/server";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
