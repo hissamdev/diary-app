@@ -19,6 +19,7 @@ export async function GET(request: Request) {
     try {
         const res = await db.query.journalEntry.findMany({
             where: { userId: session.user.id },
+            orderBy: { createdAt: "desc" },
             with: {
                 blocks: {
                     limit: 3,

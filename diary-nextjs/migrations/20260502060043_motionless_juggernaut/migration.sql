@@ -1,0 +1,2 @@
+ALTER TABLE "journal_entries" ALTER COLUMN "created_at" SET DATA TYPE timestamp(3) with time zone USING "created_at"::timestamp(3) with time zone;--> statement-breakpoint
+ALTER TABLE "journal_entries" ALTER COLUMN "last_updated" SET DATA TYPE timestamp(3) with time zone USING "last_updated"::timestamp(3) with time zone;

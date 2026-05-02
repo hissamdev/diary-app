@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import { defineRelations } from "drizzle-orm";
 import {
     boolean,
@@ -9,7 +10,6 @@ import {
     serial,
     text,
     timestamp,
-    varchar,
 } from "drizzle-orm/pg-core";
 
 // BetterAuth Tables
@@ -91,8 +91,20 @@ export const verification = pgTable(
 export const journalEntry = pgTable("journal_entries", {
     userId: text("user_id").notNull(),
     id: serial("id").primaryKey(),
-    createdAt: date("created_at").defaultNow().notNull(),
-    lastUpdated: date("last_updated").defaultNow().notNull(),
+    createdAt: timestamp("created_at", {
+        mode: "date",
+        withTimezone: true,
+        precision: 3,
+    })
+        .defaultNow()
+        .notNull(),
+    lastUpdated: timestamp("last_updated", {
+        mode: "date",
+        withTimezone: true,
+        precision: 3,
+    })
+        .defaultNow()
+        .notNull(),
     // If properties are unmodified, we will set properties based on tags later inserted.
     isPropertyModified: boolean("is_property_modified")
         .default(false)
