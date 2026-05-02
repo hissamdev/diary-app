@@ -11,11 +11,13 @@ export default async function Entries() {
     const session = await isAuthenticated();
 
     return (
-        <div className="w-full">
+        <div className="px-25 max-w-7xl w-full">
             <DiaryHeader />
-            <div className="mx-auto max-w-4xl flex-1 px-16 pt-36">
+            <div className="mx-auto w-full flex-1 pt-8">
                 <div className="text-black">
-                    <h1>Journal Entries</h1>
+                    <h1 className="font-maprope text-[60px] leading-15 tracking-[-3px]">
+                        How was your day?
+                    </h1>
                     <p>Track your daily thoughts and wellbeing</p>
                 </div>
                 <CreateDailyEntry />

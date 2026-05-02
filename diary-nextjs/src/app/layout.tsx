@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Manrope } from "next/font/google";
 // @ts-ignore
 import "./globals.css";
 
@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 
 const interFont = Inter({
     variable: "--font-inter",
+    subsets: ["latin"],
+});
+
+const manropeFont = Manrope({
+    variable: "--font-manrope",
     subsets: ["latin"],
 });
 
@@ -42,7 +47,7 @@ export default function RootLayout({
                 ></link>
             </head>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} ${interFont.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} ${interFont.variable} ${manropeFont.variable} antialiased`}
             >
                 {children}
             </body>

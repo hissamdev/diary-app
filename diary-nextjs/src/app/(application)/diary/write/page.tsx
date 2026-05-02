@@ -10,8 +10,7 @@ export default async function Write() {
     if (!session) return redirect("/diary");
 
     return (
-        <section className="bg-[#1e1e1e] min-h-screen flex">
-            <EditSidebar />
+        <section className="bg-[#1e1e1e] min-h-screen">
             <div className="w-full">
                 {session ? (
                     <Suspense>
