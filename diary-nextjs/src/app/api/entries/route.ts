@@ -5,7 +5,10 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-    const session = await isAuthenticated();
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
     if (!session) {
         return NextResponse.json({
             success: false,

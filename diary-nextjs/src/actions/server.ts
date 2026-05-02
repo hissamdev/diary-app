@@ -12,7 +12,7 @@ export async function isAuthenticated() {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
-    console.log("Session is: ", session);
+
     return session;
 }
 

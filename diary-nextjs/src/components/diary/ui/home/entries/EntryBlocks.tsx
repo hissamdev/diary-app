@@ -1,12 +1,16 @@
 import { ApiResponse } from "@/types/apis";
 import { EditEntry } from "./EntryEdit";
-import { getAllEntries } from "@/actions/server";
+import { headers } from "next/headers";
 
 export default async function EntryBlocks() {
-    const res = await fetch("http://localhost:3000/api/entries");
+    const res = await fetch("http://localhost:3000/api/entries", {
+        headers: await headers(),
+        credentials: "include",
+    });
     const json: ApiResponse = await res.json();
     if (!json.success) {
         console.error(json.message, json.error);
+        return;
     }
     const entries = json.data;
 
