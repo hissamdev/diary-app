@@ -1,13 +1,32 @@
+import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-    const { id } = (await request.json()) as { id: number };
-    const parsedId = Number(id);
+    const { entryId } = (await request.json()) as { entryId: number };
+    const parsedId = Number(entryId);
 
-    if (!parsedId || typeof parsedId !== "number")
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            status: 401,
+        });
+    }
+
+    const isUserOwner = db.query.journalEntry.findFirst({
+        where: { id: entryId, userId: session.user.id },
+    });
+
+    if (!parsedId || typeof parsedId !== "number" || !isUserOwner)
         return Response.json({
             success: false,
-            message: "Invalid entryId or 0",
+            message: "Invalid request body",
         });
 
     try {
@@ -26,7 +45,7 @@ export async function POST(request: Request) {
 
         return Response.json({
             success: true,
-            message: "Blocks retrieved successfully",
+            message: "Blocks found and retrieved successfully: ",
             data: res,
         });
     } catch (e) {
@@ -34,7 +53,7 @@ export async function POST(request: Request) {
         return Response.json({
             success: false,
             message: "Error retrieving blocks",
-            data: JSON.stringify({ type: "paragraph", content: "" }),
+            data: JSON.stringify([{ type: "paragraph", content: "" }]),
         });
     }
 }

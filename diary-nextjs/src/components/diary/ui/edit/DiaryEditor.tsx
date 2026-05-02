@@ -3,41 +3,50 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DiaryInitialization from "../../utils/blocknote/DiaryInitialization";
+import { ApiResponse } from "@/types/apis";
 
 export default function DiaryEditor() {
     const [id, setId] = useState<number>(0);
     const [saving, setSaving] = useState<boolean>(false);
-    const [data, setData] = useState<any[] | null>(null);
+    const [data, setData] = useState<any[] | null>([
+        { type: "paragraph", content: "" },
+    ]);
     const router = useRouter();
 
     useEffect(() => {
         const load = async () => {
-            const localId = Number(localStorage.getItem("entryId"));
-            if (!localId) {
+            const localEntryId = Number(localStorage.getItem("entryId"));
+            if (!localEntryId) {
                 router.push("/diary");
                 return;
             }
-            setId(localId);
+            setId(localEntryId);
 
             const res = await fetch("/api/blocks", {
                 method: "POST",
-                body: JSON.stringify({ id: localId }),
+                body: JSON.stringify({ entryId: localEntryId }),
             });
-            const { data } = (await res.json()) as { data: any[] };
+
+            const { data, success, message }: ApiResponse = await res.json();
+            if (!success) {
+                console.error(message);
+                return;
+            }
+            console.log(message, data);
             const blocks = data;
-            console.log("Type ", data);
             // @ts-ignore
             setData(blocks);
         };
         load();
     }, []);
 
-    if (!data) {
-        console.log("Not ready yet");
+    if (!data || data?.length === 0) {
+        console.log("Not ready yet, ", data);
         return <div></div>;
     }
-    if (data) {
-        console.log("data is: ", data);
+
+    if (data.length > 0) {
+        console.log("Ready: ", data);
     }
 
     return (
@@ -57,6 +66,7 @@ export default function DiaryEditor() {
             <div className="mx-auto mt-16 max-w-7xl w-full ">
                 <DiaryInitialization
                     entryId={id}
+                    // @ts-ignore
                     data={data}
                     setData={setData}
                     setSaving={setSaving}
