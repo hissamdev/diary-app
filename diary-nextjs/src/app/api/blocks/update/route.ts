@@ -1,3 +1,4 @@
+import { handleEncryption } from "@/components/diary/utils/encryption/encrypt";
 import { Blocks } from "@/types/drizzle";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
@@ -33,12 +34,15 @@ export async function PUT(request: Request) {
             message: "Invalid request body",
         });
     }
-
-    const withPosition = doc.map((block, index) => ({
-        ...block,
-        entryId,
-        position: (index + 1) * 10,
-    }));
+    // Add entry Id, add a position column, hash the content column.
+    const withPosition = await Promise.all(
+        doc.map(async (block, index) => ({
+            ...block,
+            entryId,
+            position: (index + 1) * 10,
+            content: await handleEncryption(block.content), // { encrypted: hash, iv: iv key }
+        })),
+    );
 
     const blockIds = withPosition.map((block) => block.id);
 
