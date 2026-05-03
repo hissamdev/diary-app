@@ -97,7 +97,7 @@ export default async function EntryBlocks() {
                                 </div>
                                 <EditEntry entryId={entry.id} />
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-2 space-y-2">
                                 {entry.blocks.map((block) => {
                                     return (
                                         <p
