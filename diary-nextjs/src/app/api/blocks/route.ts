@@ -1,3 +1,4 @@
+import { handleDecryption } from "@/components/diary/utils/encryption/encrypt";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
@@ -20,13 +21,13 @@ export async function POST(request: Request) {
     }
 
     const isUserOwner = db.query.journalEntry.findFirst({
-        where: { id: entryId, userId: session.user.id },
+        where: { id: entryId, userId: session.user.id }, // Get the entry, check if it has the user's id.
     });
 
     if (!parsedId || typeof parsedId !== "number" || !isUserOwner)
         return Response.json({
             success: false,
-            message: "Invalid request body",
+            message: "Invalid request body or entry doesn't exist",
         });
 
     try {
@@ -43,10 +44,21 @@ export async function POST(request: Request) {
             });
         }
 
+        // Decrypt
+        const decryptedContent = await Promise.all(
+            res.map(async (block) => ({
+                ...block,
+                content: await handleDecryption(
+                    block.content.encrypted,
+                    block.content.iv,
+                ),
+            })),
+        );
+
         return Response.json({
             success: true,
             message: "Blocks found and retrieved successfully: ",
-            data: res,
+            data: decryptedContent,
         });
     } catch (e) {
         console.error(e);

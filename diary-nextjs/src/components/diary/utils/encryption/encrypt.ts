@@ -29,7 +29,7 @@ export async function handleEncryption(data: any[]) {
     };
 }
 
-export async function handleDecryption(encryptedData, iv) {
+export async function handleDecryption(encryptedData: any, iv: any) {
     const key = await crypto.subtle.importKey(
         "raw",
         Buffer.from(process.env.ENCRYPTION_KEY as string, "base64"),

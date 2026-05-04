@@ -3,7 +3,7 @@ import { Blocks } from "@/types/drizzle";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { journalBlock } from "@/utils/schema";
-import { and, eq, notInArray } from "drizzle-orm";
+import { and, eq, notInArray, sql } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -23,8 +23,12 @@ export async function PUT(request: Request) {
         });
     }
 
+    if (!entryId) {
+        throw new Error("entryId is required");
+    }
+
     const isUserOwner = db.query.journalEntry.findFirst({
-        where: { id: entryId, userId: session.user.id },
+        where: { id: entryId, userId: session.user.id }, // Does the user have access to the provided entry?
     });
 
     // Sanitize
@@ -35,7 +39,7 @@ export async function PUT(request: Request) {
         });
     }
     // Add entry Id, add a position column, hash the content column.
-    const withPosition = await Promise.all(
+    const modifiedData = await Promise.all(
         doc.map(async (block, index) => ({
             ...block,
             entryId,
@@ -44,36 +48,30 @@ export async function PUT(request: Request) {
         })),
     );
 
-    const blockIds = withPosition.map((block) => block.id);
+    const blockIds = modifiedData.map((block) => block.id);
 
     try {
         await db.transaction(async (tx) => {
-            for (const block of withPosition) {
-                await tx
-                    .insert(journalBlock)
-                    .values({
-                        entryId: block.entryId,
-                        position: block.position,
-                        id: block.id,
-                        type: block.type,
-                        props: block.props,
-                        content: block.content,
-                        children: block.children,
-                    })
-                    .onConflictDoUpdate({
-                        target: journalBlock.id,
-                        set: {
-                            position: block.position,
-                            type: block.type,
-                            props: block.props,
-                            content: block.content,
-                            children: block.children,
-                        },
-                    });
-            }
-            if (!entryId) {
-                throw new Error("entryId is required");
-            }
+            await tx
+                .insert(journalBlock)
+                .values(modifiedData)
+                .onConflictDoUpdate({
+                    target: journalBlock.id,
+                    set: {
+                        position: sql.raw(
+                            `excluded.${journalBlock.position.name}`,
+                        ),
+                        type: sql.raw(`excluded.${journalBlock.type.name}`),
+                        props: sql.raw(`excluded.${journalBlock.props.name}`),
+                        content: sql.raw(
+                            `excluded.${journalBlock.content.name}`,
+                        ),
+                        children: sql.raw(
+                            `excluded.${journalBlock.children.name}`,
+                        ),
+                    },
+                });
+
             await tx
                 .delete(journalBlock)
                 .where(
