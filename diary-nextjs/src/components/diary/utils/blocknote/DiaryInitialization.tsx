@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateBlockNote } from "@blocknote/react";
+import { SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
 // Or, you can use ariakit, shadcn, etc.
 import { BlockNoteView } from "@blocknote/mantine";
 // Default styles for the mantine editor
@@ -17,7 +17,7 @@ import {
     defaultInlineContentSchema,
     defaultInlineContentSpecs,
 } from "@blocknote/core";
-import { Tags } from "./Tags";
+import { Tag } from "./Tags";
 import { definedTags } from "../misc/exampleBlocks";
 
 type Props = {
@@ -46,7 +46,10 @@ export default function DiaryInitialization({
             router.push("/diary");
             return;
         }
-
+        // console.log(
+        //     "The data we're saving: ",
+        //     JSON.stringify(currentData, null, 2),
+        // );
         setSaving(true);
         timer.current = setTimeout(async () => {
             try {
@@ -84,7 +87,7 @@ export default function DiaryInitialization({
     const schema = BlockNoteSchema.create({
         inlineContentSpecs: {
             ...defaultInlineContentSpecs,
-            tags: Tags,
+            tags: Tag,
         },
     });
 
@@ -131,7 +134,43 @@ export default function DiaryInitialization({
                     light: darkTheme,
                     dark: darkTheme,
                 }}
-            />
+            >
+                <SuggestionMenuController
+                    triggerCharacter={"#"} // Triggers when the user types #
+                    getItems={async (query) => {
+                        // Mock list of tags to select from
+                        const availableTags = [
+                            "urgent",
+                            "marketing",
+                            "bug-fix",
+                            "feature",
+                        ];
+
+                        return availableTags
+                            .filter((tag) =>
+                                tag.toLowerCase().includes(query.toLowerCase()),
+                            )
+                            .map((tag) => ({
+                                title: tag,
+                                onItemClick: () => {
+                                    // 1. Insert your custom inline block
+                                    editor.insertInlineContent([
+                                        {
+                                            type: "tags",
+                                            props: { tag: tag }, // Sets your propSchema tag state
+                                            content: [], // REQUIRED because content is "styled"
+                                        },
+                                        {
+                                            type: "text",
+                                            text: " ", // Convenience: adds a space after inserting so the user can keep typing outside the tag
+                                            styles: {},
+                                        },
+                                    ]);
+                                },
+                            }));
+                    }}
+                />
+            </BlockNoteView>
         </>
     );
 }

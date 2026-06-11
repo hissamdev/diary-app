@@ -1,19 +1,17 @@
 import { createReactInlineContentSpec } from "@blocknote/react";
 
-export const Tags = createReactInlineContentSpec(
+export const Tag = createReactInlineContentSpec(
     {
-        type: "tag",
+        type: "tags",
         propSchema: {
-            path: {
-                default: [] as string[],
-            },
+            tag: { default: "tag" },
         },
         content: "styled",
     } as const,
     {
         render: (props) => (
             <span style={{ backgroundColor: "black" }}>
-                @{props.inlineContent.props.tag}
+                #{props.inlineContent.props.tag}
             </span>
         ),
     },

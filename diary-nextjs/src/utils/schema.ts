@@ -112,7 +112,7 @@ export const journalEntry = pgTable("journal_entries", {
 });
 
 export const journalBlock = pgTable("journal_blocks", {
-    primaryKey: serial("primary_key").primaryKey(),
+    primaryKey: serial("primary_key").primaryKey(), // Had to name the column primaryKey as blocknote requires an id column.
     entryId: integer("entry_id").notNull(),
     position: integer().notNull(),
     id: text().notNull().unique(),
@@ -122,22 +122,47 @@ export const journalBlock = pgTable("journal_blocks", {
     children: json(),
 });
 
+export const journalTags = pgTable("journal_tags", {
+    id: serial("id").primaryKey(),
+    blockId: integer().notNull(),
+});
+
 export const relations = defineRelations(
-    { user, session, account, verification, journalEntry, journalBlock },
+    {
+        user,
+        session,
+        account,
+        verification,
+        journalEntry,
+        journalBlock,
+        journalTags,
+    },
     (r) => ({
-        journalBlock: {
-            entry: r.one.journalEntry({
-                from: r.journalBlock.entryId,
-                to: r.journalEntry.id,
-            }),
-        },
         journalEntry: {
             user: r.one.user({
                 from: r.journalEntry.userId,
                 to: r.user.id,
             }),
+
             blocks: r.many.journalBlock(),
         },
+
+        journalBlock: {
+            entry: r.one.journalEntry({
+                from: r.journalBlock.entryId,
+                to: r.journalEntry.id,
+            }),
+
+            tags: r.many.journalTags(),
+        },
+
+        journalTags: {
+            block: r.one.journalBlock({
+                from: r.journalTags.blockId,
+                to: r.journalBlock.primaryKey,
+            }),
+        },
+
         user: {
             entries: r.many.journalEntry(),
             sessions: r.many.session({
