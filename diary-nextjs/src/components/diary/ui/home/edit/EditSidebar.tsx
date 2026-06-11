@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useEntryContext } from "../../utils/context/entry/EntryContext";
+import { useEntryContext } from "../../../utils/context/entry/EntryContext";
+import React from "react";
+import { EntryRes } from "../entries/EntryBlocks";
 
 type Props = {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    allEntries: EntryRes["data"];
 };
 
-export default function EditSidebar({ open, setOpen }: Props) {
-    const { allEntries } = useEntryContext();
+export default function EditSidebar({ open, setOpen, allEntries }: Props) {
+    const log = allEntries;
+    console.log(log?.[0]?.blocks?.[0]?.content?.[0]?.text);
 
     return (
         <aside
@@ -32,7 +36,9 @@ export default function EditSidebar({ open, setOpen }: Props) {
                     </div>
                     <div>
                         {allEntries.map((entry) => (
-                            <div>{entry.id}</div>
+                            <div key={entry.id}>
+                                {entry?.blocks?.[0]?.content?.[0]?.text}
+                            </div>
                         ))}
                     </div>
                 </div>

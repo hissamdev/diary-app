@@ -23,7 +23,6 @@ import { Tag } from "./Tags";
 type Props = {
     entryId: number;
     data: any[];
-    setData: React.Dispatch<React.SetStateAction<any[] | null>>;
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -55,7 +54,6 @@ export function CustomSuggestion(
 export default function DiaryInitialization({
     entryId,
     data,
-    setData,
     setSaving,
 }: Props) {
     const timer = useRef<NodeJS.Timeout | null>(null);
@@ -63,7 +61,6 @@ export default function DiaryInitialization({
 
     const handleSave = async () => {
         if (timer.current) clearTimeout(timer.current);
-        setData(editor.document);
 
         const currentData = editor.document;
         if (currentData.length === 0 || currentData?.[0]?.id === null) return;

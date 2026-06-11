@@ -1,4 +1,4 @@
-import CreateDailyEntry from "./entries/CreateDailyEntry";
+import CreateDailyEntry from "./CreateDailyEntry";
 
 export default function DiarySidebarRight() {
     return (

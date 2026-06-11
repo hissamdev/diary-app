@@ -1,5 +1,5 @@
-import DiarySidebar from "@/components/diary/ui/home/DiarySidebar";
-import DiarySidebarRight from "@/components/diary/ui/home/DiarySidebarRight";
+import DiarySidebar from "@/components/diary/ui/home/entries/DiarySidebar";
+import DiarySidebarRight from "@/components/diary/ui/home/entries/DiarySidebarRight";
 import Entries from "@/components/diary/ui/home/entries/Entries";
 
 export default function Home() {
