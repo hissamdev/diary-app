@@ -73,6 +73,7 @@ export async function PUT(request: Request) {
                     },
                 });
 
+            // Fetch all blocks for current entry (prevents deleting blocks from other entries), delete blocks that were not included in this operation.
             await tx
                 .delete(journalBlock)
                 .where(

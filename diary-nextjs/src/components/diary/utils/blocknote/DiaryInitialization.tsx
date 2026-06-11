@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
 import { BlockNoteSchema, defaultInlineContentSpecs } from "@blocknote/core";
 import { Tag } from "./Tags";
+import CustomSuggestion from "./CustomSuggestion";
 
 type Props = {
     entryId: number;
@@ -112,6 +113,7 @@ export default function DiaryInitialization({
             >
                 <SuggestionMenuController
                     triggerCharacter={"#"} // Triggers when the user types #
+                    suggestionMenuComponent={CustomSuggestion}
                     getItems={async (query) => {
                         // Mock list of tags to select from
                         const availableTags = [
