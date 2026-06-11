@@ -1,5 +1,3 @@
-import EditSidebar from "@/components/diary/ui/edit/EditSidebar";
-import DiaryEditor from "@/components/diary/ui/edit/DiaryEditorPreInit";
 import { Suspense } from "react";
 import { isAuthenticated } from "@/actions/server";
 import { redirect } from "next/navigation";

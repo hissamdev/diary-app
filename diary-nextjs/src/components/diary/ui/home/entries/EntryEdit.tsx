@@ -3,6 +3,7 @@
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { EntryRes } from "./EntryBlocks";
+import { useEntryContext } from "@/components/diary/utils/context/entry/EntryContext";
 
 type Props = {
     entryId: number;
@@ -10,6 +11,9 @@ type Props = {
 };
 
 export function EditEntry({ entryId, allEntries }: Props) {
+    // const { setAllEntries } = useEntryContext();
+    // setAllEntries(allEntries);
+
     return (
         <Link
             onClick={() => localStorage.setItem("entryId", entryId.toString())}

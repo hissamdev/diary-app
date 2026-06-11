@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { useEntryContext } from "../../utils/context/entry/EntryContext";
 
 type Props = {
     open: boolean;
@@ -6,6 +8,8 @@ type Props = {
 };
 
 export default function EditSidebar({ open, setOpen }: Props) {
+    const { allEntries } = useEntryContext();
+
     return (
         <aside
             onClick={() => setOpen(!open)}
@@ -25,6 +29,11 @@ export default function EditSidebar({ open, setOpen }: Props) {
                                 Diary App
                             </Link>
                         </div>
+                    </div>
+                    <div>
+                        {allEntries.map((entry) => (
+                            <div>{entry.id}</div>
+                        ))}
                     </div>
                 </div>
             </div>
