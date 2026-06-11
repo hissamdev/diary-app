@@ -8,6 +8,13 @@ export async function GET(req: NextRequest) {
         headers: await headers(),
     });
 
+    if (!session) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized or entry not found",
+        });
+    }
+
     const res = await db.query.journalEntry.findFirst({
         where: { userId: session?.user.id },
         columns: {
@@ -15,10 +22,11 @@ export async function GET(req: NextRequest) {
         },
         orderBy: { createdAt: "desc" },
     });
-    if (!session || !res) {
+
+    if (!res) {
         return NextResponse.json({
             success: false,
-            message: "Unauthorized or entry not found",
+            message: "Entry not found",
         });
     }
 

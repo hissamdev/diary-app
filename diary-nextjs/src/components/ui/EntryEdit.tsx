@@ -2,18 +2,13 @@
 
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import { EntryRes } from "./EntryBlocks";
-import { useEntryContext } from "@/components/context/EntryContext";
+import { Entry } from "@/types/apis";
 
 type Props = {
     entryId: number;
-    allEntries: EntryRes["data"];
 };
 
-export function EditEntry({ entryId, allEntries }: Props) {
-    // const { setAllEntries } = useEntryContext();
-    // setAllEntries(allEntries);
-
+export function EditEntry({ entryId }: Props) {
     return (
         <Link
             onClick={() => localStorage.setItem("entryId", entryId.toString())}

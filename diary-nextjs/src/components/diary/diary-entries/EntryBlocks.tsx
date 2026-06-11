@@ -1,34 +1,7 @@
-import { ApiResponse } from "@/types/apis";
-import { EditEntry } from "./EntryEdit";
+import { ApiWithEntries } from "@/types/apis";
+import { EditEntry } from "../../ui/EntryEdit";
 import { headers } from "next/headers";
-import { DotSquare, Ellipsis } from "lucide-react";
-
-export type EntryRes = {
-    success: boolean;
-    message: string;
-    error: unknown;
-    data: {
-        userId: string;
-        id: number;
-        createdAt: Date;
-        lastUpdated: Date;
-        // If properties are unmodified, we will set properties based on tags later inserted.
-        isPropertyModified: boolean;
-        blocks: any[];
-    }[];
-};
-
-export type EntryData = {
-    data: {
-        userId: string;
-        id: number;
-        createdAt: string;
-        lastUpdated: string;
-        // If properties are unmodified, we will set properties based on tags later inserted.
-        isPropertyModified: boolean;
-        blocks: any[];
-    };
-};
+import { Ellipsis } from "lucide-react";
 
 export default async function EntryBlocks() {
     const res = await fetch("http://localhost:3000/api/entries", {
@@ -38,7 +11,7 @@ export default async function EntryBlocks() {
     if (!res.ok) {
         console.error(res.ok, res.status, res.statusText);
     }
-    const json: EntryRes = await res.json();
+    const json: ApiWithEntries = await res.json();
 
     if (!json.success) {
         console.error(json.message, json.error);
@@ -96,10 +69,7 @@ export default async function EntryBlocks() {
                                     </span>
                                     <Ellipsis className="text-black" />
                                 </div>
-                                <EditEntry
-                                    entryId={entry.id}
-                                    allEntries={entriesWithDate}
-                                />
+                                <EditEntry entryId={entry.id} />
                             </div>
                             <div className="mt-2 space-y-2">
                                 {entry.blocks.map((block) => {

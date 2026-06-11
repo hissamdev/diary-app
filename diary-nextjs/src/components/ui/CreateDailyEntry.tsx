@@ -5,7 +5,12 @@ import { authClient } from "@/utils/auth-client";
 import { compareDate } from "@/utils/functions/compareDate";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { EntryData, EntryRes } from "./EntryBlocks";
+
+type LastEntryDate = ApiResponse & {
+    data: {
+        createdAt: string;
+    };
+};
 
 export default function CreateDailyEntry() {
     const [exists, setExists] = useState(true);
@@ -31,9 +36,9 @@ export default function CreateDailyEntry() {
                 method: "GET",
             });
             if (!res.ok) return console.error(res.status);
-            const json: EntryData = await res.json();
-            const latestEntry = new Date(json.data?.createdAt).toDateString();
-            const entryExists = compareDate(latestEntry);
+            const json: LastEntryDate = await res.json();
+            const lastEntryDate = new Date(json.data?.createdAt).toDateString();
+            const entryExists = compareDate(lastEntryDate); // Check if last entry was today
             setExists(entryExists);
         };
         load();

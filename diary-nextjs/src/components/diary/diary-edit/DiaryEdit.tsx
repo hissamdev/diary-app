@@ -5,14 +5,13 @@ import DiaryEditorPreInit from "./DiaryEditorPreInit";
 import EditorHeader from "./EditorHeader";
 import EditSidebar from "./EditSidebar";
 import { useRouter } from "next/navigation";
-import { ApiResponse } from "@/types/apis";
-import { EntryRes } from "../diary-entries/EntryBlocks";
+import { ApiWithEntries, Entry } from "@/types/apis";
 
 export default function DiaryEdit() {
     const [saving, setSaving] = useState(false);
     const [entryId, setEntryId] = useState(0);
     const [open, setOpen] = useState(false);
-    const [allEntries, setAllEntries] = useState<EntryRes["data"]>([]);
+    const [allEntries, setAllEntries] = useState<Entry[]>([]);
     const [data, setData] = useState<any[] | null>(null);
     const router = useRouter();
 
@@ -30,7 +29,7 @@ export default function DiaryEdit() {
                 body: JSON.stringify({ entryId: localEntryId }),
             });
 
-            const json: ApiResponse = await res.json();
+            const json: ApiWithEntries = await res.json();
             if (!json.success) {
                 console.error(json.message);
                 return;
@@ -43,7 +42,7 @@ export default function DiaryEdit() {
             const entryRes = await fetch("/api/entries", {
                 method: "GET",
             });
-            const currentEntries: EntryRes = await entryRes.json();
+            const currentEntries: ApiWithEntries = await entryRes.json();
             if (!currentEntries.success) {
                 console.error(entryRes);
             }

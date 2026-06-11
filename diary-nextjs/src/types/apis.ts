@@ -2,6 +2,9 @@ export type ApiResponse = {
     success: boolean;
     message: string;
     error: unknown;
+};
+
+export type ApiWithEntries = ApiResponse & {
     data: Entry[];
 };
 
@@ -47,3 +50,5 @@ export type DBBlock = Omit<Block, "content"> & {
         iv: string;
     };
 };
+
+//
