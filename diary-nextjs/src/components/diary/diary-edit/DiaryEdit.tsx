@@ -17,6 +17,7 @@ export default function DiaryEdit() {
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            // Use entryId stored in localStorage to fetch blocks of a specific entry
             const localEntryId = Number(localStorage.getItem("entryId"));
             if (!localEntryId) {
                 router.push("/diary");
