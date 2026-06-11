@@ -22,7 +22,7 @@ import { Tag } from "./Tags";
 
 type Props = {
     entryId: number;
-    data: any[];
+    data: ApiResponse["data"][number]["blocks"];
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

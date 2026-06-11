@@ -3,6 +3,7 @@ import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { DBEntry } from "@/types/apis";
 
 export async function GET(request: Request) {
     const session = await auth.api.getSession({
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     try {
-        const res = await db.query.journalEntry.findMany({
+        const res = (await db.query.journalEntry.findMany({
             where: { userId: session.user.id },
             orderBy: { createdAt: "desc" },
             with: {
@@ -27,7 +28,7 @@ export async function GET(request: Request) {
                     orderBy: { position: "asc" },
                 },
             },
-        });
+        })) as DBEntry[];
 
         const decryptedContent = await Promise.all(
             res.map(async (entry) => ({

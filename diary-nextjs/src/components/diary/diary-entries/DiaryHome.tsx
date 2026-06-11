@@ -1,13 +1,10 @@
-import { ArrowRight, Edit } from "lucide-react";
 import DiaryHeader from "../../ui/diary-header/DiaryHeader";
 import EntryBlocks from "./EntryBlocks";
 import { Suspense } from "react";
-import CreateDailyEntry from "./CreateDailyEntry";
 import { isAuthenticated } from "@/actions/server";
-import { redirect } from "next/navigation";
 import SignIn from "../../ui/auth/SignIn";
 
-export default async function Entries() {
+export default async function DiaryHome() {
     const session = await isAuthenticated();
 
     return (
