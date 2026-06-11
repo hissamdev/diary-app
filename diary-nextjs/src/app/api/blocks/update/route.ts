@@ -44,11 +44,11 @@ export async function PUT(request: Request) {
             ...block,
             entryId,
             position: (index + 1) * 10,
-            content: await handleEncryption(block.content), // { encrypted: hash, iv: iv key }
+            content: await handleEncryption(block.content), // return { encrypted: hash, iv: iv key }
         })),
     );
 
-    const blockIds = modifiedData.map((block) => block.id);
+    const blockIds = modifiedData.map((block) => block.id); // return [ "block-id-array" ]
 
     try {
         await db.transaction(async (tx) => {
@@ -56,6 +56,7 @@ export async function PUT(request: Request) {
                 .insert(journalBlock)
                 .values(modifiedData)
                 .onConflictDoUpdate({
+                    // On conflict updates these rows with new data
                     target: journalBlock.id,
                     set: {
                         position: sql.raw(
@@ -91,7 +92,7 @@ export async function PUT(request: Request) {
         console.error(e);
         return NextResponse.json({
             message:
-                "Server action failed to propagate changes to remote database",
+                "Update API failed to propagate changes to remote database",
             success: false,
             error: e,
         });

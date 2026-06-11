@@ -39,14 +39,13 @@ export async function POST(request: Request) {
             return Response.json({
                 success: true,
                 message: "No blocks found, returning default",
-                id: typeof parsedId,
                 data: [{ type: "paragraph", content: "" }],
             });
         }
 
         // Decrypt
         const decryptedContent = await Promise.all(
-            res.map(async (block) => ({
+            res.map(async (block: any) => ({
                 ...block,
                 content: await handleDecryption(
                     block.content.encryptedData,
@@ -57,14 +56,14 @@ export async function POST(request: Request) {
 
         return Response.json({
             success: true,
-            message: "Blocks found and retrieved successfully: ",
+            message: "Blocks found and retrieved successfully",
             data: decryptedContent,
         });
     } catch (e) {
         console.error(e);
         return Response.json({
             success: false,
-            message: "Error retrieving blocks",
+            message: "Error retrieving blocks, sending default",
             data: JSON.stringify([{ type: "paragraph", content: "" }]),
         });
     }

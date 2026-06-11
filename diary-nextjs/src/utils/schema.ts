@@ -124,7 +124,9 @@ export const journalBlock = pgTable("journal_blocks", {
 
 export const journalTags = pgTable("journal_tags", {
     id: serial("id").primaryKey(),
-    blockId: integer().notNull(),
+    blockId: integer("block_id").notNull(),
+    name: text("name").notNull(),
+    category: text("category"),
 });
 
 export const relations = defineRelations(
