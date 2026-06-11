@@ -1,3 +1,57 @@
+export const definedTags = [
+    {
+        name: "Memory",
+        desc: "Things that are memorable",
+        nested: [
+            {
+                name: "parent",
+                desc: "Memories about my parents",
+                nested: [
+                    {
+                        name: "Father",
+                        desc: "Memories about my father",
+                    },
+                    {
+                        name: "Mother",
+                        desc: "Memories about my mother",
+                    },
+                ],
+            },
+            {
+                name: "Childhood",
+                desc: "Memories about my childhood",
+                nested: [
+                    {
+                        name: "School",
+                        desc: "Memories about my school",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        name: "Conv",
+        desc: "Conversational",
+        nested: [
+            {
+                name: "Confidence",
+                desc: "Note a display of confidence",
+                nested: [],
+            },
+            {
+                name: "Personal",
+                desc: "Something I would say",
+                nested: [
+                    {
+                        name: "Group",
+                        desc: "Something said in groups",
+                    },
+                ],
+            },
+        ],
+    },
+];
+
 const retrievedData = [
     {
         id: "726e5145-bc2d-4343-b6a5-5229f2bad5a0",

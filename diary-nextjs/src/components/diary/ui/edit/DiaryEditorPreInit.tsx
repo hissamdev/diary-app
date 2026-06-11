@@ -1,5 +1,5 @@
 "use client";
-
+// This component exists to delay calling the initilization component, as we're delaying hook orders here, and having it in this file would bring hook order issues.
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
@@ -20,7 +20,7 @@ export default function DiaryEditorPreInit({
     const router = useRouter();
 
     useEffect(() => {
-        const load = async () => {
+        const fetchInitialData = async () => {
             const localEntryId = Number(localStorage.getItem("entryId"));
             if (!localEntryId) {
                 router.push("/diary");
@@ -43,7 +43,7 @@ export default function DiaryEditorPreInit({
             // @ts-ignore
             setData(blocks);
         };
-        load();
+        fetchInitialData();
     }, []);
 
     if (!Array.isArray(data) || !data || data?.length === 0) {

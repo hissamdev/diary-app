@@ -49,7 +49,7 @@ export async function POST(request: Request) {
             res.map(async (block) => ({
                 ...block,
                 content: await handleDecryption(
-                    block.content.encrypted,
+                    block.content.encryptedData,
                     block.content.iv,
                 ),
             })),

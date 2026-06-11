@@ -1,5 +1,32 @@
 {
-	"files.associations": {
-		"wrangler.json": "jsonc"
-	}
+    "files.associations": {
+        "wrangler.json": "jsonc"
+    },
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "Cloudflare Preview",
+                    "commands": ["pnpm run preview"]
+                },
+                {
+                    "name": "Drizzle Studio",
+                    "commands": ["pnpm drizzle-kit studio"],
+                    "shouldRunCommands": true
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Development Server",
+                    "commands": ["pnpm run dev"]
+                },
+                {
+                    "name": "Git",
+                    "commands": ["git add ."]
+                }
+            ]
+        }
+    ]
 }

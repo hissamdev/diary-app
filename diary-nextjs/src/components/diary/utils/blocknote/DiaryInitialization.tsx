@@ -12,6 +12,13 @@ import "@blocknote/core/fonts/inter.css";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
+import {
+    BlockNoteSchema,
+    defaultInlineContentSchema,
+    defaultInlineContentSpecs,
+} from "@blocknote/core";
+import { Tags } from "./Tags";
+import { definedTags } from "../misc/exampleBlocks";
 
 type Props = {
     entryId: number;
@@ -74,7 +81,34 @@ export default function DiaryInitialization({
         return;
     }
 
+    const schema = BlockNoteSchema.create({
+        inlineContentSpecs: {
+            ...defaultInlineContentSpecs,
+            tags: Tags,
+        },
+    });
+
+    // const getTagMenuItems = (editor typeof schema.BlockNoteEditor): DefaultReactSuggestionItem[] => {
+    //     const tags = definedTags;
+
+    //     return tags.map((tag) => ({
+    //         title: tag.name,
+    //         onItemClick: () => {
+    //             editor.insertInlineContent([
+    //                 {
+    //                     type: "tag",
+    //                     props: {
+    //                         tag.name
+    //                     },
+    //                 }
+    //                 " ",
+    //             ])
+    //         }
+    //     }))
+    // }
+
     const editor = useCreateBlockNote({
+        schema,
         initialContent: data,
     });
 

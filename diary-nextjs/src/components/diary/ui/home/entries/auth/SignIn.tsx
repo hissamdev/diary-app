@@ -4,7 +4,7 @@ import { authClient } from "@/utils/auth-client";
 
 export default function SignIn() {
     const handleGoogleAuth = async () => {
-        const data = await authClient.signIn.social({
+        await authClient.signIn.social({
             provider: "google",
             callbackURL: "http://localhost:3000/diary",
         });

@@ -1,3 +1,4 @@
+import { handleDecryption } from "@/components/diary/utils/encryption/encrypt";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
@@ -28,10 +29,31 @@ export async function GET(request: Request) {
             },
         });
 
+        const decryptedContent = await Promise.all(
+            res.map(async (entry) => ({
+                ...entry,
+                blocks: await Promise.all(
+                    entry.blocks.map(async (block) => ({
+                        ...block,
+                        content: await handleDecryption(
+                            block.content.encryptedData,
+                            block.content.iv,
+                        ),
+                    })),
+                ),
+            })),
+        );
+        console.log(
+            "Data: ",
+            decryptedContent[0].blocks,
+            "\n Content: ",
+            Array.isArray(decryptedContent[0].blocks[0].content),
+        );
+
         return Response.json({
             success: true,
             message: "All entries fetched successfully",
-            data: res,
+            data: decryptedContent,
         });
     } catch (e) {
         console.error("Failed to fetch entries: ", e);
