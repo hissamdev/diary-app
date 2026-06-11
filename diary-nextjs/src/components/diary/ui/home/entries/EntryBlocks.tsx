@@ -44,14 +44,13 @@ export default async function EntryBlocks() {
     }
     const entriesWithDate = json.data.map((entry) => ({
         ...entry,
-        createdAt: new Date(entry.createdAt),
+        createdAt: new Date(entry.createdAt), // Format date
         lastUpdated: new Date(entry.lastUpdated),
     }));
-    const entries = entriesWithDate;
 
     return (
         <div className="mt-5 grid grid-cols-1 gap-y-3">
-            {entries.map((entry) => {
+            {entriesWithDate.map((entry) => {
                 const dateFormatted = entry.createdAt.toLocaleDateString(
                     "en-US",
                     {

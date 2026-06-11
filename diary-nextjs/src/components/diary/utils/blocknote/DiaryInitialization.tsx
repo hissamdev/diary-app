@@ -1,6 +1,11 @@
 "use client";
 
-import { SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
+import {
+    DefaultReactSuggestionItem,
+    SuggestionMenuController,
+    SuggestionMenuProps,
+    useCreateBlockNote,
+} from "@blocknote/react";
 // Or, you can use ariakit, shadcn, etc.
 import { BlockNoteView } from "@blocknote/mantine";
 // Default styles for the mantine editor
@@ -14,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
 import { BlockNoteSchema, defaultInlineContentSpecs } from "@blocknote/core";
 import { Tag } from "./Tags";
-import CustomSuggestion from "./CustomSuggestion";
 
 type Props = {
     entryId: number;
@@ -22,6 +26,31 @@ type Props = {
     setData: React.Dispatch<React.SetStateAction<any[] | null>>;
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export function CustomSuggestion(
+    props: SuggestionMenuProps<DefaultReactSuggestionItem>,
+) {
+    return (
+        <div className={"slash-menu bg-white text-black p-4 rounded-lg"}>
+            <span className="inline-block mb-2 text-lg text-gray-700 font-semibold">
+                Group Name
+            </span>
+            {props.items.map((item, index) => (
+                <div
+                    key={index}
+                    className={`slash-menu-item py-2 px-4 min-w-sm text-sm border-t border-t-black/10 hover:bg-black/10 last:border-b last:border-b-black/10 cursor-pointer ${
+                        props.selectedIndex === index ? "selected" : ""
+                    }`}
+                    onClick={() => {
+                        props.onItemClick?.(item);
+                    }}
+                >
+                    {item.title}
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default function DiaryInitialization({
     entryId,
@@ -135,13 +164,13 @@ export default function DiaryInitialization({
                                         {
                                             type: "tags",
                                             props: { tag: tag }, // Sets your propSchema tag state
-                                            content: [], // REQUIRED because content is "styled"
+                                            // content: [], // REQUIRED because content is "styled"
                                         },
-                                        {
-                                            type: "text",
-                                            text: " ", // Convenience: adds a space after inserting so the user can keep typing outside the tag
-                                            styles: {},
-                                        },
+                                        // {
+                                        //     type: "text",
+                                        //     text: " ", // Convenience: adds a space after inserting so the user can keep typing outside the tag
+                                        //     styles: {},
+                                        // },
                                     ]);
                                 },
                             }));

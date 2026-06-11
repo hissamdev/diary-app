@@ -6,7 +6,7 @@ export const Tag = createReactInlineContentSpec(
         propSchema: {
             tag: { default: "tag" },
         },
-        content: "styled",
+        content: "none",
     } as const,
     {
         render: (props) => (
