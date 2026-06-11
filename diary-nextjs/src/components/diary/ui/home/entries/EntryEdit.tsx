@@ -1,12 +1,15 @@
 "use client";
 
 import { Edit } from "lucide-react";
-import { useEntryContext } from "../../../utils/context/entry/EntryContext";
 import Link from "next/link";
+import { EntryRes } from "./EntryBlocks";
 
-export function EditEntry({ entryId }: { entryId: number }) {
-    const { setId } = useEntryContext();
+type Props = {
+    entryId: number;
+    allEntries: EntryRes["data"];
+};
 
+export function EditEntry({ entryId, allEntries }: Props) {
     return (
         <Link
             onClick={() => localStorage.setItem("entryId", entryId.toString())}

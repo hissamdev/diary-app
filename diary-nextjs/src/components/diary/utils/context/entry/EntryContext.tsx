@@ -1,21 +1,22 @@
 "use client";
 
+import { EntryRes } from "@/components/diary/ui/home/entries/EntryBlocks";
 import { createContext, useContext, useState } from "react";
 
-type EntryProps = {
-    id: number | null;
-    setId: (id: number | null) => void;
+type EntryContextType = {
+    allEntries: EntryRes["data"];
+    setAllEntries: React.Dispatch<React.SetStateAction<EntryRes["data"]>>;
 };
 
-const EntryContext = createContext<EntryProps | null>(null);
+const EntryContext = createContext<EntryContextType | null>(null);
 
 const EntryContextProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [id, setId] = useState<number | null>(null);
+    const [allEntries, setAllEntries] = useState<EntryRes["data"]>([]);
 
     return (
-        <EntryContext.Provider value={{ id, setId }}>
+        <EntryContext.Provider value={{ allEntries, setAllEntries }}>
             {children}
         </EntryContext.Provider>
     );

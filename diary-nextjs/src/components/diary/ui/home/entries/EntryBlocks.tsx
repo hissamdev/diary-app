@@ -7,17 +7,15 @@ export type EntryRes = {
     success: boolean;
     message: string;
     error: unknown;
-    data: [
-        {
-            userId: string;
-            id: number;
-            createdAt: string;
-            lastUpdated: string;
-            // If properties are unmodified, we will set properties based on tags later inserted.
-            isPropertyModified: boolean;
-            blocks: any[];
-        },
-    ];
+    data: {
+        userId: string;
+        id: number;
+        createdAt: Date;
+        lastUpdated: Date;
+        // If properties are unmodified, we will set properties based on tags later inserted.
+        isPropertyModified: boolean;
+        blocks: any[];
+    }[];
 };
 
 export type EntryData = {
@@ -38,6 +36,7 @@ export default async function EntryBlocks() {
         credentials: "include",
     });
     const json: EntryRes = await res.json();
+
     if (!json.success) {
         console.error(json.message, json.error);
         return;
@@ -94,7 +93,10 @@ export default async function EntryBlocks() {
                                     </span>
                                     <Ellipsis className="text-black" />
                                 </div>
-                                <EditEntry entryId={entry.id} />
+                                <EditEntry
+                                    entryId={entry.id}
+                                    allEntries={entriesWithDate}
+                                />
                             </div>
                             <div className="mt-2 space-y-2">
                                 {entry.blocks.map((block) => {
