@@ -6,7 +6,7 @@ import EditorHeader from "./EditorHeader";
 import EditSidebar from "./EditSidebar";
 import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
-import { EntryRes } from "../entries/EntryBlocks";
+import { EntryRes } from "../diary-entries/EntryBlocks";
 
 export default function DiaryEdit() {
     const [saving, setSaving] = useState(false);

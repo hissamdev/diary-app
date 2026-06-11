@@ -1,4 +1,4 @@
-import { EntryContextProvider } from "@/components/diary/utils/context/entry/EntryContext";
+import { EntryContextProvider } from "@/components/context/EntryContext";
 
 export default function DiaryLayout({
     children,

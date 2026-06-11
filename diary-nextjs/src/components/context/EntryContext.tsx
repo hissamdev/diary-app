@@ -1,6 +1,6 @@
 "use client";
 
-import { EntryRes } from "@/components/diary/ui/home/entries/EntryBlocks";
+import { EntryRes } from "@/components/diary/diary-entries/EntryBlocks";
 import { createContext, useContext, useState } from "react";
 
 type EntryContextType = {

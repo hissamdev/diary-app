@@ -1,5 +1,4 @@
 import { betterAuth, socialProviderList, socialProviders } from "better-auth";
-import { emailOTP } from "better-auth/plugins";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { db } from "./db";
 import * as schema from "./schema";

@@ -1,4 +1,4 @@
-import { handleDecryption } from "@/components/diary/utils/encryption/encrypt";
+import { handleDecryption } from "@/utils/functions/encrypt";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";

@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useEntryContext } from "../../../utils/context/entry/EntryContext";
+import { useEntryContext } from "../../context/EntryContext";
 import React from "react";
-import { EntryRes } from "../entries/EntryBlocks";
+import { EntryRes } from "../diary-entries/EntryBlocks";
 
 type Props = {
     open: boolean;

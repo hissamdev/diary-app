@@ -2,7 +2,7 @@
 // This component exists to delay calling the initilization component, as we're delaying hook orders here, and having it in this file would bring hook order issues.
 import { useEffect, useState } from "react";
 import { ApiResponse } from "@/types/apis";
-import { DynamicEditor } from "../../../utils/blocknote/DynamicEditor";
+import { DynamicEditor } from "../../blocknote/DynamicEditor";
 
 type Props = {
     entryId: number;

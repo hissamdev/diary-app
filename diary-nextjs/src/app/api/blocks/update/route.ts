@@ -1,4 +1,4 @@
-import { handleEncryption } from "@/components/diary/utils/encryption/encrypt";
+import { handleEncryption } from "@/utils/functions/encrypt";
 import { Blocks } from "@/types/drizzle";
 import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { isAuthenticated } from "@/actions/server";
 import { redirect } from "next/navigation";
-import DiaryEdit from "@/components/diary/ui/home/edit/DiaryEdit";
+import DiaryEdit from "@/components/diary/diary-edit/DiaryEdit";
 
 export default async function Write() {
     const session = await isAuthenticated();

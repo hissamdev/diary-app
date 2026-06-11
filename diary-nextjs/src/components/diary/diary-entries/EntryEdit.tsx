@@ -3,7 +3,7 @@
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { EntryRes } from "./EntryBlocks";
-import { useEntryContext } from "@/components/diary/utils/context/entry/EntryContext";
+import { useEntryContext } from "@/components/context/EntryContext";
 
 type Props = {
     entryId: number;
