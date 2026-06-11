@@ -11,9 +11,6 @@ type Props = {
 };
 
 export default function EditSidebar({ open, setOpen, allEntries }: Props) {
-    const log = allEntries;
-    console.log(log?.[0]?.blocks?.[0]?.content?.[0]?.text);
-
     return (
         <aside
             onClick={() => setOpen(!open)}

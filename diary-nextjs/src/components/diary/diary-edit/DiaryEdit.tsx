@@ -35,7 +35,6 @@ export default function DiaryEdit() {
                 console.error(json.message);
                 return;
             }
-            console.log(json.message, json.data);
             const blocks = json.data;
             // @ts-ignore
             setData(blocks);

@@ -43,16 +43,6 @@ export async function GET(request: Request) {
                 ),
             })),
         );
-        console.log(
-            "Data: ",
-            decryptedContent[0].blocks,
-            "\n Content: ",
-            Array.isArray(decryptedContent[0].blocks[0].content),
-        );
-        console.log(
-            "Successfully fetched all entries, data:",
-            decryptedContent[0].blocks[0].content[0].text,
-        );
         return Response.json({
             success: true,
             message: "All entries fetched successfully",

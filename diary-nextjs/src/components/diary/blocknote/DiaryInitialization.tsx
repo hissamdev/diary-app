@@ -68,10 +68,6 @@ export default function DiaryInitialization({
             router.push("/diary");
             return;
         }
-        // console.log(
-        //     "The data we're saving: ",
-        //     JSON.stringify(currentData, null, 2),
-        // );
         setSaving(true);
         timer.current = setTimeout(async () => {
             try {

@@ -23,10 +23,6 @@ export default function CreateDailyEntry() {
         });
 
         const parsed = (await res.json()) as { success: boolean };
-
-        if (parsed.success) {
-            console.log("Entry created successfully");
-        }
     };
 
     useEffect(() => {

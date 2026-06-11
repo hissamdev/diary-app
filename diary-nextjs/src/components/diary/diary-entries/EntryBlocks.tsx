@@ -35,6 +35,9 @@ export default async function EntryBlocks() {
         headers: await headers(),
         credentials: "include",
     });
+    if (!res.ok) {
+        console.error(res.ok, res.status, res.statusText);
+    }
     const json: EntryRes = await res.json();
 
     if (!json.success) {
