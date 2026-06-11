@@ -50,7 +50,6 @@ export async function handleDecryption(encryptedData: any, iv: any) {
             key,
             Buffer.from(encryptedData, "base64"),
         );
-        console.log(typeof new TextDecoder().decode(decryptedData));
         const str = new TextDecoder().decode(decryptedData);
         const data = JSON.parse(str);
         return data;

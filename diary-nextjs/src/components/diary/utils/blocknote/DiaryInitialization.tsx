@@ -9,16 +9,11 @@ import "@blocknote/mantine/style.css";
 // Include the included Inter font
 //@ts-ignore
 import "@blocknote/core/fonts/inter.css";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ApiResponse } from "@/types/apis";
-import {
-    BlockNoteSchema,
-    defaultInlineContentSchema,
-    defaultInlineContentSpecs,
-} from "@blocknote/core";
+import { BlockNoteSchema, defaultInlineContentSpecs } from "@blocknote/core";
 import { Tag } from "./Tags";
-import { definedTags } from "../misc/exampleBlocks";
 
 type Props = {
     entryId: number;
@@ -66,7 +61,6 @@ export default function DiaryInitialization({
                 if (!res.ok) {
                     console.error("HTTP Error: ", res.status);
                 }
-                console.log(!!res);
                 const json: ApiResponse = await res.json();
                 if (!json.success) {
                     console.error(json.message, json.error);
@@ -90,25 +84,6 @@ export default function DiaryInitialization({
             tags: Tag,
         },
     });
-
-    // const getTagMenuItems = (editor typeof schema.BlockNoteEditor): DefaultReactSuggestionItem[] => {
-    //     const tags = definedTags;
-
-    //     return tags.map((tag) => ({
-    //         title: tag.name,
-    //         onItemClick: () => {
-    //             editor.insertInlineContent([
-    //                 {
-    //                     type: "tag",
-    //                     props: {
-    //                         tag.name
-    //                     },
-    //                 }
-    //                 " ",
-    //             ])
-    //         }
-    //     }))
-    // }
 
     const editor = useCreateBlockNote({
         schema,
