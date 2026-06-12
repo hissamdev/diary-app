@@ -1,5 +1,5 @@
 import { ApiWithEntries } from "@/types/apis";
-import { EditEntry } from "../../ui/EntryEdit";
+import { EditEntry } from "../../../ui/EntryEdit";
 import { headers } from "next/headers";
 import { Ellipsis } from "lucide-react";
 

@@ -52,7 +52,7 @@ export const definedTags = [
     },
 ];
 
-const retrievedData = [
+export const exampleBlocks = [
     {
         id: "726e5145-bc2d-4343-b6a5-5229f2bad5a0",
         type: "paragraph",
