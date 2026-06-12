@@ -8,6 +8,10 @@ export type ApiWithEntries = ApiResponse & {
     data: Entry[];
 };
 
+export type ApiWithLatestEntry = ApiResponse & {
+    data: Entry;
+};
+
 export type Entry = {
     userId: string;
     id: number;
