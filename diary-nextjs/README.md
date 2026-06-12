@@ -1,6 +1,6 @@
 # Diary App Documentation
 
-This project uses Next.js for rendering frontend and route handlers for backend APIs. It uses a Postgres database on Neon. Notable setup:
+This project uses Next.js for rendering frontend and route handlers for backend APIs. It uses a Postgres database on Neon. It notably uses BlockNote for rich text editing and a block-level document structure. More setup info:
 
 - Uses Drizzle ORM with an HTTP driver instance. The setup config can be found in `src/utils/db.ts`
 - Has state management setup in `components/context`
@@ -9,8 +9,8 @@ This project uses Next.js for rendering frontend and route handlers for backend 
 
 ## Environment Variables
 
-- NEXT_PUBLIC_API_URL: Used to set frontend domain (e.g. http://localhost:3000, notice no trailing slash)
--
+- NEXT_PUBLIC_API_URL: Used to set frontend domain (e.g. http://localhost:3000, notice no trailing slash).
+- DATABASE_URL: Connection to the Neon database.
 
 ## API Reference
 
@@ -80,3 +80,7 @@ Which means, the actual content from each block is encrypted in the database.
 Route: `/api/blocks/update`
 
 Method: `PUT`
+
+```
+Note: Due to complexities related to environment variables and authentication I have not included steps to run the project locally as of now.
+```
