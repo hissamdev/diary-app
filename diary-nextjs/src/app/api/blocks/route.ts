@@ -4,9 +4,16 @@ import { db } from "@/utils/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-    const { entryId } = (await request.json()) as { entryId: number };
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const entryId = searchParams.get("entryId");
     const parsedId = Number(entryId);
+    if (Number.isNaN(parsedId)) {
+        return NextResponse.json({
+            success: false,
+            message: "Invalid body",
+        });
+    }
 
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -20,12 +27,12 @@ export async function POST(request: Request) {
         });
     }
 
-    const isUserOwner = db.query.journalEntry.findFirst({
-        where: { id: entryId, userId: session.user.id }, // Get the entry, check if it has the user's id.
+    const isUserOwner = await db.query.journalEntry.findFirst({
+        where: { id: parsedId, userId: session.user.id }, // Get the entry, check if it has the user's id.
     });
 
-    if (!parsedId || typeof parsedId !== "number" || !isUserOwner)
-        return Response.json({
+    if (Number.isNaN(parsedId) || !isUserOwner)
+        return NextResponse.json({
             success: false,
             message: "Invalid request body or entry doesn't exist",
         });
@@ -36,7 +43,7 @@ export async function POST(request: Request) {
             orderBy: { position: "asc" },
         });
         if (res.length === 0) {
-            return Response.json({
+            return NextResponse.json({
                 success: true,
                 message: "No blocks found, returning default",
                 data: [{ type: "paragraph", content: "" }],
@@ -54,17 +61,17 @@ export async function POST(request: Request) {
             })),
         );
 
-        return Response.json({
+        return NextResponse.json({
             success: true,
             message: "Blocks found and retrieved successfully",
             data: decryptedContent,
         });
     } catch (e) {
         console.error(e);
-        return Response.json({
+        return NextResponse.json({
             success: false,
             message: "Error retrieving blocks, sending default",
-            data: JSON.stringify([{ type: "paragraph", content: "" }]),
+            data: [{ type: "paragraph", content: "" }],
         });
     }
 }

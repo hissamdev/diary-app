@@ -32,14 +32,25 @@ export default function CreateDailyEntry() {
 
     useEffect(() => {
         const load = async () => {
-            const res = await fetch("/api/entries/first", {
-                method: "GET",
-            });
-            if (!res.ok) return console.error(res.status);
-            const json: LastEntryDate = await res.json();
-            const lastEntryDate = new Date(json.data?.createdAt).toDateString();
-            const entryExists = compareDate(lastEntryDate); // Check if last entry was today
-            setExists(entryExists);
+            try {
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/entries/first`,
+                );
+                if (!res.ok) {
+                    console.error(res.status, res.statusText);
+                }
+                const json: LastEntryDate = await res.json();
+                if (!json.success) {
+                    console.error(json.message, json.error);
+                }
+                const lastEntryDate = new Date(
+                    json.data?.createdAt,
+                ).toDateString();
+                const entryExists = compareDate(lastEntryDate); // Check if last entry was today
+                setExists(entryExists);
+            } catch (e) {
+                console.error(e);
+            }
         };
         load();
     }, []);

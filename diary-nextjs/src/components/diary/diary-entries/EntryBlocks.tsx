@@ -3,12 +3,17 @@ import { EditEntry } from "../../ui/EntryEdit";
 import { headers } from "next/headers";
 import { Ellipsis } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function EntryBlocks() {
     try {
-        const res = await fetch("http://localhost:8787/api/entries", {
-            headers: await headers(),
-            credentials: "include",
-        });
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/entries`,
+            {
+                headers: await headers(),
+                credentials: "include",
+            },
+        );
         if (!res.ok) {
             console.error(res.ok, res.status, res.statusText);
         }
@@ -69,7 +74,7 @@ export default async function EntryBlocks() {
                                         </div>
                                         <EditEntry entryId={entry.id} />
                                     </div>
-                                    <div className="mt-2 space-y-2">
+                                    <div className=" space-y">
                                         {entry.blocks.map((block) => {
                                             return (
                                                 <p

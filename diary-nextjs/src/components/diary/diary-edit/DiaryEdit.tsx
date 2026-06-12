@@ -17,37 +17,46 @@ export default function DiaryEdit() {
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            // Use entryId stored in localStorage to fetch blocks of a specific entry
-            const localEntryId = Number(localStorage.getItem("entryId"));
-            if (!localEntryId) {
-                router.push("/diary");
-                return;
-            }
-            setEntryId(localEntryId);
+            try {
+                // Use entryId stored in localStorage to fetch blocks of a specific entry
+                const localEntryId = Number(localStorage.getItem("entryId"));
+                if (!localEntryId) {
+                    router.push("/diary");
+                    return;
+                }
+                setEntryId(localEntryId);
 
-            const res = await fetch("/api/blocks", {
-                method: "POST",
-                body: JSON.stringify({ entryId: localEntryId }),
-            });
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/blocks?entryId=${localEntryId}`,
+                );
 
-            const json: ApiWithEntries = await res.json();
-            if (!json.success) {
-                console.error(json.message);
-                return;
-            }
-            const blocks = json.data;
-            // @ts-ignore
-            setData(blocks);
+                if (!res.ok) {
+                    console.error("Fetch failed:", res.status, res.statusText);
+                }
 
-            // Get all entries for sidebar
-            const entryRes = await fetch("/api/entries", {
-                method: "GET",
-            });
-            const currentEntries: ApiWithEntries = await entryRes.json();
-            if (!currentEntries.success) {
-                console.error(entryRes);
+                const json: ApiWithEntries = await res.json();
+                if (!json.success) {
+                    console.error(json.message);
+                }
+                const blocks = json.data;
+                setData(blocks);
+
+                // Get all entries for sidebar
+                const entryRes = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/entries`,
+                );
+                if (!entryRes.ok) {
+                    console.error(entryRes.status, entryRes.statusText);
+                }
+                const currentEntries: ApiWithEntries = await entryRes.json();
+                if (!currentEntries.success) {
+                    console.error(currentEntries.message);
+                }
+                setAllEntries(currentEntries.data);
+            } catch (e) {
+                console.error("Failed to fetch blocks:", e);
+                return <div>Error occured</div>;
             }
-            setAllEntries(currentEntries.data);
         };
         fetchInitialData();
     }, []);
