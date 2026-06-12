@@ -1,12 +1,6 @@
 "use client";
 
-import {
-    Hamburger,
-    HamburgerIcon,
-    LineSquiggle,
-    LucideHamburger,
-    Menu,
-} from "lucide-react";
+import { Menu } from "lucide-react";
 
 type Props = {
     saving: boolean;

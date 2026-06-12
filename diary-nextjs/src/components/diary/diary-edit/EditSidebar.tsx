@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useEntryContext } from "../../context/EntryContext";
 import React from "react";
-import { EntryRes } from "../diary-entries/EntryBlocks";
+import { Entry } from "@/types/apis";
 
 type Props = {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    allEntries: EntryRes["data"];
+    allEntries: Entry[];
 };
 
 export default function EditSidebar({ open, setOpen, allEntries }: Props) {

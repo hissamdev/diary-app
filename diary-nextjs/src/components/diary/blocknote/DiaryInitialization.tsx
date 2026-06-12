@@ -16,13 +16,13 @@ import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ApiResponse } from "@/types/apis";
+import { ApiResponse, Block } from "@/types/apis";
 import { BlockNoteSchema, defaultInlineContentSpecs } from "@blocknote/core";
 import { Tag } from "./Tags";
 
 type Props = {
     entryId: number;
-    data: ApiResponse["data"][number]["blocks"];
+    data: Block[];
     setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
