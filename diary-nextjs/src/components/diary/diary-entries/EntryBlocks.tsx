@@ -74,7 +74,7 @@ export default async function EntryBlocks() {
                                         </div>
                                         <EditEntry entryId={entry.id} />
                                     </div>
-                                    <div className=" space-y">
+                                    <div className="space-y">
                                         {entry.blocks.map((block) => {
                                             return (
                                                 <p
