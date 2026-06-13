@@ -3,10 +3,11 @@ import { ApiWithLatestEntry, Block, Entry } from "@/types/apis";
 import { compareDate } from "@/utils/functions/compareDate";
 import { LoaderCircle, MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import DiaryEditorPreInit from "../../diary-edit/DiaryEditorPreInit";
 
 export default function CurrentDayEntry() {
     const [entryExists, setEntryExists] = useState(true);
-    const [latestBlocks, setLatestBlocks] = useState<Block[]>([]);
+    const [latestEntry, setLatestEntry] = useState<Entry | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,10 +20,13 @@ export default function CurrentDayEntry() {
                 console.error(res.status, res.statusText);
             }
             const parsed: ApiWithLatestEntry = await res.json();
+            if (!parsed.success) {
+                console.error(parsed.message, parsed.error);
+            }
 
             const bool = compareDate(parsed.data.createdAt);
             setEntryExists(true);
-            setLatestBlocks(parsed.data.blocks);
+            setLatestEntry(parsed.data);
             console.log("From main component", parsed);
             setLoading(false);
         };
@@ -49,7 +53,7 @@ export default function CurrentDayEntry() {
                 className={`mt-4 ${loading ? "h-0" : "h-100"} transition-all duration-300 overflow-hidden`}
             >
                 {entryExists ? (
-                    <TodayEntry latestBlocks={latestBlocks} />
+                    <TodayEntry latestEntry={latestEntry} />
                 ) : (
                     <CreateEntry />
                 )}
@@ -59,22 +63,18 @@ export default function CurrentDayEntry() {
 }
 
 type Props = {
-    latestBlocks: Block[];
+    latestEntry: Entry | null;
 };
 
-function TodayEntry({ latestBlocks }: Props) {
-    console.log(latestBlocks);
+function TodayEntry({ latestEntry }: Props) {
+    if (!latestEntry) return null;
+
     return (
         <div className="mt-4">
-            {latestBlocks &&
-                latestBlocks.map((block) => (
-                    <p
-                        key={block.id}
-                        className="text-black text-[17px] font-manrope"
-                    >
-                        {block?.content?.[0]?.text}
-                    </p>
-                ))}
+            <DiaryEditorPreInit
+                entryId={latestEntry.id}
+                data={latestEntry.blocks}
+            />
         </div>
     );
 }

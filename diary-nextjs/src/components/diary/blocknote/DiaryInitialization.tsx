@@ -23,7 +23,6 @@ import { Tag } from "./Tags";
 type Props = {
     entryId: number;
     data: Block[];
-    setSaving: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function CustomSuggestion(
@@ -51,11 +50,7 @@ export function CustomSuggestion(
     );
 }
 
-export default function DiaryInitialization({
-    entryId,
-    data,
-    setSaving,
-}: Props) {
+export default function DiaryInitialization({ entryId, data }: Props) {
     const timer = useRef<NodeJS.Timeout | null>(null);
     const router = useRouter();
 
@@ -68,7 +63,6 @@ export default function DiaryInitialization({
             router.push("/diary");
             return;
         }
-        setSaving(true);
         timer.current = setTimeout(async () => {
             try {
                 const res = await fetch("/api/blocks/update", {
@@ -91,8 +85,6 @@ export default function DiaryInitialization({
             } catch (err) {
                 console.error(err);
             }
-
-            setSaving(false);
         }, 1000);
     };
 
@@ -116,8 +108,8 @@ export default function DiaryInitialization({
     const darkTheme = {
         colors: {
             editor: {
-                text: "#FFFFFFAA",
-                background: "#1e1e1e",
+                text: "black",
+                background: "#FFFFFFAA",
             },
         },
     };

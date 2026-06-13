@@ -3,6 +3,7 @@ import { auth } from "@/utils/auth";
 import { db } from "@/utils/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { Block } from "@/types/apis";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -38,10 +39,10 @@ export async function GET(request: Request) {
         });
 
     try {
-        const res = await db.query.journalBlock.findMany({
+        const res = (await db.query.journalBlock.findMany({
             where: { entryId: parsedId },
             orderBy: { position: "asc" },
-        });
+        })) as Block[];
         if (res.length === 0) {
             return NextResponse.json({
                 success: true,
@@ -51,7 +52,7 @@ export async function GET(request: Request) {
         }
 
         // Decrypt
-        const decryptedContent = await Promise.all(
+        const decryptedContent: Block[] = await Promise.all(
             res.map(async (block: any) => ({
                 ...block,
                 content: await handleDecryption(

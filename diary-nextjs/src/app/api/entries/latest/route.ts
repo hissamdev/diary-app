@@ -36,15 +36,18 @@ export async function GET() {
             });
         }
 
-        const decryptedContent = await Promise.all(
-            res.blocks.map(async (block) => ({
-                ...block,
-                content: await handleDecryption(
-                    block.content.encryptedData,
-                    block.content.iv,
-                ),
-            })),
-        );
+        const decryptedContent = {
+            ...res,
+            blocks: await Promise.all(
+                res.blocks.map(async (block) => ({
+                    ...block,
+                    content: await handleDecryption(
+                        block.content.encryptedData,
+                        block.content.iv,
+                    ),
+                })),
+            ),
+        };
 
         console.log(
             "Latest entry successfully found\n",
@@ -54,7 +57,7 @@ export async function GET() {
         return NextResponse.json({
             success: true,
             message: "Latest entry successfully found",
-            data: { blocks: decryptedContent },
+            data: decryptedContent,
         });
     } catch (e) {
         console.error(e);

@@ -5,14 +5,14 @@ import DiaryEditorPreInit from "./DiaryEditorPreInit";
 import EditorHeader from "./EditorHeader";
 import EditSidebar from "./EditSidebar";
 import { useRouter } from "next/navigation";
-import { ApiWithEntries, Entry } from "@/types/apis";
+import { ApiWithBlocks, ApiWithEntries, Block, Entry } from "@/types/apis";
 
 export default function DiaryEdit() {
     const [saving, setSaving] = useState(false);
     const [entryId, setEntryId] = useState(0);
     const [open, setOpen] = useState(false);
     const [allEntries, setAllEntries] = useState<Entry[]>([]);
-    const [data, setData] = useState<any[] | null>(null);
+    const [data, setData] = useState<Block[] | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -34,11 +34,11 @@ export default function DiaryEdit() {
                     console.error("Fetch failed:", res.status, res.statusText);
                 }
 
-                const json: ApiWithEntries = await res.json();
+                const json: ApiWithBlocks = await res.json();
                 if (!json.success) {
                     console.error(json.message);
                 }
-                const blocks = json.data;
+                const blocks: Block[] = json.data;
                 setData(blocks);
 
                 // Get all entries for sidebar
@@ -76,7 +76,6 @@ export default function DiaryEdit() {
                 />
                 <Suspense>
                     <DiaryEditorPreInit
-                        setSaving={setSaving}
                         entryId={entryId}
                         setEntryId={setEntryId}
                         data={data}

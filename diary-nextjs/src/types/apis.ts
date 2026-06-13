@@ -12,6 +12,10 @@ export type ApiWithLatestEntry = ApiResponse & {
     data: Entry;
 };
 
+export type ApiWithBlocks = ApiResponse & {
+    data: Block[];
+};
+
 export type Entry = {
     userId: string;
     id: number;
